@@ -1,0 +1,451 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banco Promerica · Informe Ejecutivo RRHH — Versión 2</title>
+<meta name="theme-color" content="#006837">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-950:#006837; --green-900:#006837; --green-800:#006837; --green-700:#006837; --green-600:#006837;
+    --green-500:#006837; --green-400:#006837; --green-300:#006837; --green-200:#006837; --green-100:#006837;
+    --ink:#0d1214; --muted:#5f6a73; --bg:#f4f8f6; --card:#ffffff; --border:#e1ece5; --radius:22px;
+    --shadow:0 18px 48px rgba(0,0,0,.12); --glass:rgba(255,255,255,.7); --accent:#006837;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:Montserrat, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif; color:var(--ink);
+       background:radial-gradient(1100px 620px at -10% -20%, #d5f1e1 0%, rgba(213,241,225,0) 45%), radial-gradient(900px 620px at 110% 0%, #c2ecd8 0%, rgba(194,236,216,0) 50%), var(--bg);}
+  a{color:var(--green-700); text-decoration:none} a:hover{text-decoration:underline}
+  header.hero{position:relative; overflow:hidden; background:linear-gradient(135deg, var(--green-700), var(--green-500)); color:#006837;}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px 18px; position:relative}
+  .brandrow{display:flex; align-items:center; justify-content:space-between; gap:12px}
+  .brand{display:flex; align-items:center; gap:12px}
+  .wordmark{font-weight:900; letter-spacing:.3px; font-size:clamp(18px,3vw,26px)}
+  .tagline{font-size:12px; opacity:.95}
+  .star{width:36px;height:36px;position:relative; border-radius:8px; box-shadow:0 0 0 2px rgba(255,255,255,.18) inset}
+  .star svg{display:block}
+  nav.toc{position:sticky; top:0; z-index:50; backdrop-filter: blur(8px); background:rgba(255,255,255,.86); border-bottom:1px solid var(--border)}
+  .toc .wrap{display:flex; align-items:center; justify-content:flex-end; padding:10px 18px}
+  .toc .links{display:none}
+  .toc a{font-size:12px; font-weight:800; color:#0f3a2a; padding:7px 10px; border-radius:999px; border:1px solid #dbece2; background:#f7fbf9}
+  .actions{display:flex; gap:8px}
+  .btn{font-size:12px; font-weight:800; padding:8px 10px; border-radius:10px; border:1px solid #d7e9df; background:#fff; color:#0f3a2a; cursor:pointer}
+  .btn:hover{background:#f2fbf6}
+  main{max-width:1180px;margin:0 auto 54px; padding:0 18px; position:relative; z-index:2}
+  .section{background:var(--glass); backdrop-filter: blur(10px); border:1px solid var(--border);
+            box-shadow:var(--shadow); border-radius:var(--radius); padding:16px 18px; margin:14px 0}
+  .section h1{margin:0 0 6px; color:var(--green-900); font-size:clamp(18px,2.6vw,24px)}
+  .muted{color:var(--muted)}
+  .lead{font-size:14px; color:#163b2a}
+  .progress{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+  .step{display:flex; gap:10px; align-items:center; padding:6px 10px; background:#fff; border:1px solid var(--border); border-radius:999px; font-size:12px; font-weight:800; color:#0f3a2a}
+  .step .dot{width:18px;height:18px; border-radius:999px; background:var(--green-300); display:inline-block; border:2px solid #d0eadf}
+  .score{display:flex; gap:10px; flex-wrap:wrap}
+  .chip{flex:1 1 220px; min-width:220px; background:#fff; border:1px solid var(--border); border-radius:16px; padding:12px 14px;
+         box-shadow:0 10px 26px rgba(12,90,58,.08); position:relative}
+  .chip .value{font-weight:900; font-size:clamp(22px,3.6vw,32px); color:var(--green-700)}
+  .chip .label{font-size:12.5px; font-weight:800; color:#103b2a; letter-spacing:.2px; margin-top:4px}
+  .chip .read{font-size:12px; color:#2b3237; margin-top:6px}
+  .chip .flag{position:absolute; right:10px; top:10px; font-size:11px; padding:3px 8px; border-radius:999px; border:1px solid #cfe6d8; background:#edf8f1; color:#0f3a2a; font-weight:800}
+  .flow{background:#fff; border:1px solid var(--border); border-radius:22px; padding:10px; box-shadow:var(--shadow)}
+  svg text{font-family:Montserrat, Arial, sans-serif}
+  .callout{margin-top:10px; font-size:13px; color:#103b2a; background:#f2fbf6; border:1px solid #d9efe5; padding:8px 10px; border-radius:10px; display:inline-block}
+  .pillar{background:#fff; border:1px solid var(--border); border-radius:24px; box-shadow:var(--shadow); padding:16px; margin:12px 0}
+  .phead{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px}
+  .ptitle{font-weight:900; color:var(--green-800)}
+  .pdesc{font-size:12px; color:#2c4238}
+  .grid{display:grid; gap:12px; grid-template-columns: repeat(5, minmax(200px,1fr))}
+  @media (max-width:1100px){ .grid{ grid-template-columns: repeat(3, minmax(200px,1fr)) } }
+  @media (max-width:760px){ .grid{ grid-template-columns: repeat(2, minmax(160px,1fr)) } }
+  .tile{position:relative; background:#fff; border:1px solid var(--border); border-radius:18px; padding:14px; min-height:128px; box-shadow:0 10px 26px rgba(12,90,58,.08)}
+  .tile .value{font-weight:900; font-size:clamp(22px,4vw,34px); color:var(--green-700)}
+  .tile .label{margin-top:6px; font-size:13px; font-weight:800; color:#103b2a; letter-spacing:.2px}
+  .tile .take{margin-top:8px; font-size:12px; color:#253631}
+  .tip{position:absolute; right:10px; top:10px; font-size:11px; padding:3px 8px; border-radius:999px; border:1px solid #cfe6d8; background:#edf8f1; color:#0f3a2a; font-weight:800; cursor:help}
+  .ribbons{display:grid; gap:10px; grid-template-columns: repeat(3, minmax(220px,1fr)); margin-top:10px}
+  @media (max-width:900px){ .ribbons{ grid-template-columns:1fr } }
+  .rib{background:linear-gradient(90deg,#006837,#ffffff); border:1px solid var(--border); border-left:6px solid var(--green-300);
+        border-radius:12px; padding:10px 12px; font-size:13px; color:#163b2a; box-shadow:0 10px 24px rgba(0,0,0,.06)}
+  .concl{background:var(--glass); backdrop-filter: blur(10px); border:1px solid var(--border); border-radius:24px; box-shadow:var(--shadow); padding:16px; margin-top:12px}
+  .concl h2{margin:0 0 6px; color:var(--green-900)}
+  .bullets{margin:8px 0 0 18px} .bullets li{margin:6px 0}
+  details.gloss{margin-top:8px}
+  details.gloss summary{cursor:pointer; font-weight:800; color:#0f3a2a}
+  footer{ text-align:center; margin:28px 0 40px; color:var(--muted); font-size:12px}
+  /* Focus mode */
+  .focus main .section, .focus main .pillar, .focus main .concl { box-shadow:none }
+  .focus nav.toc{display:none}
+  /* Print */
+  @media print{
+    nav.toc,.actions{display:none!important}
+    .section,.pillar,.concl,.flow{break-inside:avoid}
+    body{background:#fff}
+  }
+
+  .explain{margin:6px 0 10px; font-size:13px; color:#2b3b33; background:#f7fbf9; border:1px dashed #cfe6d8; padding:8px 10px; border-radius:10px}
+
+/* Contextual tooltip */
+.hint{display:inline-flex; align-items:center; justify-content:center; margin-left:8px; width:18px; height:18px;
+      border-radius:999px; background:#006837; border:1px solid #cfe6d8; color:#0f3a2a; font-size:12px; font-weight:900;
+      cursor:help; position:relative; user-select:none}
+.hint::before{content:"i"; line-height:1}
+.hint[data-tip]:hover::after, .hint[data-tip]:focus::after{
+      content:attr(data-tip); position:absolute; left:0; top:125%; min-width:220px; max-width:420px; z-index:20;
+      background:#103b2a; color:#fff; border-radius:10px; padding:10px 12px; font-size:12px; font-weight:600;
+      box-shadow:0 10px 24px rgba(0,0,0,.18); white-space:normal}
+.hint[data-tip]:hover::before, .hint[data-tip]:focus::before{
+      content:""; position:absolute; top:110%; left:10px; border:7px solid transparent; border-bottom-color:#103b2a}
+
+
+/* Section separation and title band */
+.band{margin:-6px -6px 12px -6px; padding:10px 12px; border-radius:16px;
+      background:linear-gradient(0deg,#f3fbf6,#ffffff); border:1px solid var(--border)}
+.section, .pillar, .concl{margin:26px 0; padding:20px 20px}
+.section + .section, .pillar + .pillar, .section + .pillar, .pillar + .section{margin-top:32px}
+.section::after, .pillar::after, .concl::after{
+  content:""; display:block; height:1px; margin-top:18px;
+  background:linear-gradient(90deg, rgba(26,123,79,.0), rgba(26,123,79,.25), rgba(26,123,79,.0));
+  border-radius:999px
+}
+
+.phead .icon{font-size:18px; margin-right:6px}
+
+/* Left rail per section: vertical line + circular marker */
+.section, .pillar, .concl{position:relative; padding-left:64px}
+.section::before, .pillar::before, .concl::before{
+  content:""; position:absolute; left:28px; top:0; bottom:0; width:3px;
+  background:linear-gradient(180deg, rgba(26,123,79,.25), rgba(26,123,79,.1));
+  border-radius:999px
+}
+.section::after, .pillar::after, .concl::after{
+  content:""; position:absolute; left:19px; top:26px; width:20px; height:20px; border-radius:999px;
+  background:#fff; border:3px solid var(--green-600); box-shadow:0 2px 8px rgba(0,0,0,.08)
+}
+@media (max-width:760px){
+  .section, .pillar, .concl{padding-left:48px}
+  .section::before, .pillar::before, .concl::before{left:20px}
+  .section::after, .pillar::after, .concl::after{left:11px}
+}
+
+
+/* Special connector for Resumen global */
+#mirada.section, #mirada{position:relative; padding-left:64px}
+#mirada::before{
+  content:""; position:absolute; left:28px; top:0; bottom:0; width:3px;
+  background:linear-gradient(180deg, rgba(26,123,79,.25), rgba(26,123,79,.1));
+  border-radius:999px
+}
+#mirada::after{
+  content:""; position:absolute; left:19px; top:26px; width:20px; height:20px; border-radius:999px;
+  background:#fff; border:3px solid var(--green-700); box-shadow:0 2px 8px rgba(0,0,0,.1)
+}
+
+
+  /* Flow card inside section B */
+  .flowcard{margin-top:12px; background:#ffffff; border:1px solid var(--border); border-radius:18px; 
+            padding:14px; box-shadow:0 10px 26px rgba(12,90,58,.08)}
+  .flowcard .flowhead{font-weight:900; color:var(--green-800); margin:0 0 6px; font-size:16px}
+  .flowcard svg{max-width:100%}
+</style>
+
+
+<style>
+
+/* === Mejora de legibilidad para bloques verde oscuro (#006837) === */
+[style*="#006837"], [style*="#006837"] * {
+  color: #ffffff !important;
+}
+[style*="#006837"] {
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(0,0,0,.35);
+}
+/* Si hay tarjetas claras, aseguramos contraste correcto */
+.card, .kpi, .etiqueta, .etiquetas, .panel, .box {
+  color: #0b3a2a;
+}
+/* Tamaño y énfasis de números dentro de esos bloques */
+[style*="#006837"] .valor, 
+[style*="#006837"] .numero, 
+[style*="#006837"] .percent, 
+[style*="#006837"] b, 
+[style*="#006837"] strong {
+  font-weight: 800 !important;
+}
+
+</style>
+<style>
+/* --- Intro breve a la derecha del título de sección --- */
+.section-titlebar{display:flex; justify-content:space-between; align-items:baseline; gap:12px}
+.section-titlebar .section-intro{
+  font:600 14px/1.2 Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  color:#1d5944; opacity:.9; white-space:nowrap; background:#eef7f2; 
+  border:1px solid #d2e9df; padding:6px 10px; border-radius:12px;
+}
+@media (max-width:860px){
+  .section-titlebar{flex-wrap:wrap}
+  .section-titlebar .section-intro{white-space:normal}
+}
+</style>
+<style>
+/* === Timeline layout aplicado a cada sección === */
+.tl-card{
+  position: relative;
+  background:#ffffff;
+  border:1px solid #e4efe9;
+  border-radius:26px;
+  box-shadow:0 18px 40px rgba(0,0,0,.08);
+  padding:16px 16px 18px 72px; /* espacio para el riel */
+  margin:18px 12px;
+}
+.tl-card::before{
+  content:"";
+  position:absolute;
+  left:36px;
+  top:14px;
+  bottom:14px;
+  width:6px;
+  border-radius:6px;
+  background:linear-gradient(180deg,#d7eadf,#c6e1d4,#d7eadf);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.02);
+}
+.tl-dot{
+  position:absolute;
+  left:23px;
+  top:26px;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:#fff;
+  border:3px solid #006837;
+  box-shadow:0 6px 14px rgba(0,0,0,.15);
+}
+/* afinar la barra de título con la nueva caja */
+.tl-card .section-titlebar{margin-left:-8px; margin-right:0}
+</style>
+</head>
+<body>
+<header style="background:#006837; color:#fff; padding:20px; text-align:center; border-radius:8px; margin:20px 0;">
+  <h1 style="margin:0; font-size:24px; font-family:Arial, sans-serif;">
+    Indicadores de Gestión del Talento Humano · Banco Promerica
+  </h1>
+</header>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="wrap">
+      
+      <div class="actions">
+        <button class="btn" onclick="window.print()">Descargar PDF</button>
+        
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+<section class="section intro">
+  <div class="band">
+    <h1>Informe Ejecutivo de Recursos Humanos</h1>
+  </div>
+  <p class="lead">Este panel presenta un resumen estratégico de los principales indicadores de Talento Humano de Banco Promerica. El objetivo es ofrecer a la gerencia una visión clara de la estabilidad, atracción, compensación y diversidad en la organización, sirviendo como base para decisiones rápidas y fundamentadas.</p>
+</section>
+
+    
+      <p class="lead">La organización muestra crecimiento neto de plantilla de 3,72% sostenido por una tasa de contratación de 12,09% que supera una rotación total de 7,03% (voluntaria 3,07% / involuntaria 3,06% ). La rotación del primer año (3,07%) y la permanencia promedio (2,09 años) sugieren reforzar onboarding y movilidad interna para elevar la estabilidad.</p>
+    </section>
+
+    
+      <div class="score">
+        <div class="chip"><div class="flag">Estabilidad</div><div class="value">7,03 %</div><div class="label">Rotación total</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Salidas totales / dotación promedio del período. Incluye voluntarias e involuntarias."></span><div class="read">Vol. 3,07 % · Invol. 3,06 %</div></div>
+        <div class="chip"><div class="flag">Early tenure</div><div class="value">3,07 %</div><div class="label">Rotación 1er año</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Salidas con antigüedad ≤ 12 meses / dotación promedio. Señala fricción temprana."></span><div class="read">Ajuste de onboarding y encaje</div></div>
+        <div class="chip"><div class="flag">Tenencia</div><div class="value">2,09</div><div class="label">Permanencia (años)</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Años promedio de antigüedad (tenure). Promedio de la diferencia entre fecha actual y fecha de ingreso."></span><div class="read">Tenencia moderada</div></div>
+        <div class="chip"><div class="flag">Atracción</div><div class="value">12,09 %</div><div class="label">Contratación</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Ingresos del período / dotación promedio. Indica ritmo de atracción."></span><div class="read">Ritmo consistente</div></div>
+        <div class="chip"><div class="flag">Headcount</div><div class="value">3,72 %</div><div class="label">Variación plantilla A/A</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="((Headcount fin de período – Headcount fin período anterior)/Headcount fin período anterior)."></span><div class="read">Crecimiento neto</div></div>
+        <div class="chip"><div class="flag">Compensación</div><div class="value">12,00 %</div><div class="label">Variación salarial A/A</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="((Gasto salarial anual – Gasto salarial anual previo)/Gasto salarial anual previo)."></span><div class="read">Mercado y mérito</div></div>
+        <div class="chip"><div class="flag">Diversidad</div><div class="value">48 % / 52 %</div><div class="label">Composición F/M</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Distribución % mujeres / hombres sobre dotación total."></span><div class="read">Balance general</div></div>
+      </div>
+    </section>
+
+    
+      <svg viewBox="0 0 980 160" width="100%" height="160" role="img" aria-label="Flujo de talento">
+        <rect x="10" y="40" width="170" height="80" rx="12" fill="#006837" stroke="#cfe6d8"/>
+        <text font-weight="700" x="95" y="85" text-anchor="middle" font-size="14" fill="#ffffff">Stock inicial</text>
+
+        <rect x="230" y="40" width="200" height="80" rx="12" fill="#ffffff" stroke="#cfe6d8"/>
+        <text font-weight="700" x="330" y="70" text-anchor="middle" font-size="14" fill="#0f3a2a">+ Contratación</text>
+        <text x="330" y="95" text-anchor="middle" font-size="13" fill="#006837">12,09 %</text>
+
+        <rect x="480" y="40" width="200" height="80" rx="12" fill="#ffffff" stroke="#cfe6d8"/>
+        <text font-weight="700" x="580" y="70" text-anchor="middle" font-size="14" fill="#0f3a2a">− Rotación</text>
+        <text x="580" y="95" text-anchor="middle" font-size="13" fill="#006837">7,03 % (V 3,07 · I 3,06)</text>
+
+        <rect x="730" y="40" width="240" height="80" rx="12" fill="#006837" stroke="#cfe6d8"/>
+        <text font-weight="700" x="850" y="70" text-anchor="middle" font-size="14" fill="#ffffff">= Stock final</text>
+        <text font-weight="800" x="850" y="95" text-anchor="middle" font-size="13" fill="#ffffff">Variación neta: +3,72 %</text>
+
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse">
+            <path d="M0,0 L8,4 L0,8 z" fill="#006837"/>
+          </marker>
+        </defs>
+        <line x1="180" y1="80" x2="230" y2="80" stroke="#006837" stroke-width="3" marker-end="url(#arrow)"/>
+        <line x1="430" y1="80" x2="480" y2="80" stroke="#006837" stroke-width="3" marker-end="url(#arrow)"/>
+        <line x1="680" y1="80" x2="730" y2="80" stroke="#006837" stroke-width="3" marker-end="url(#arrow)"/>
+      </svg>
+      <div class="callout"><b>Lectura:</b> La contratación supera las salidas y sostiene un crecimiento neto moderado.</div>
+    </section>
+
+    <section class="pillar" id="pilar-a">
+      <div class="phead">
+        <div class="ptitle"><span class="icon">🛡️</span>A. Estabilidad y Retención</div>
+        <div class="pdesc">Rotación, permanencia y primeras salidas</div>
+      </div>
+      <div class="grid">
+        <div class="tile" title="Proporción de colaboradores que dejan la empresa en el período.">
+          <span class="tip">Def.</span>
+          <div class="value">7,03 %</div>
+          <div class="label">Rotación total</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Salidas totales / dotación promedio del período. Incluye voluntarias e involuntarias."></span>
+          <div class="take">Riesgo moderado: proteger talento crítico y planes de sucesión.</div>
+        </div>
+        <div class="tile" title="Renuncias voluntarias / dotación.">
+          <span class="tip">Def.</span>
+          <div class="value">3,07 %</div>
+          <div class="label">Rotación voluntaria</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Renuncias voluntarias / dotación promedio del período."></span>
+          <div class="take">Abordar engagement, carrera y liderazgo.</div>
+        </div>
+        <div class="tile" title="Salidas no voluntarias / dotación.">
+          <span class="tip">Def.</span>
+          <div class="value">3,06 %</div>
+          <div class="label">Rotación involuntaria</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Separaciones no voluntarias / dotación promedio del período."></span>
+          <div class="take">Revisar desempeño, criterios de salida y encaje al rol.</div>
+        </div>
+        <div class="tile" title="Salidas en los primeros 12 meses.">
+          <span class="tip">Def.</span>
+          <div class="value">3,07 %</div>
+          <div class="label">Rotación 1er año</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Salidas con antigüedad ≤ 12 meses / dotación promedio. Señala fricción temprana."></span>
+          <div class="take">Fortalecer onboarding 30·60·90 y mentoring.</div>
+        </div>
+        <div class="tile" title="Años promedio que permanece un colaborador.">
+          <span class="tip">Def.</span>
+          <div class="value">2,09</div>
+          <div class="label">Permanencia (años)</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Años promedio de antigüedad (tenure). Promedio de la diferencia entre fecha actual y fecha de ingreso."></span>
+          <div class="take">Impulsar movilidad interna y planes de carrera.</div>
+        </div>
+      </div>
+      <details class="gloss"><summary>Notas de medición</summary>
+        <ul class="bullets">
+          <li>Rotaciones calculadas sobre dotación promedio del período.</li>
+          <li>Primer año: salidas con antigüedad ≤ 12 meses.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section class="pillar" id="pilar-b">
+      <div class="phead">
+        <div class="ptitle"><span class="icon">🎯</span>B. Atracción y Onboarding</div>
+        <div class="pdesc">Entradas y calidad de encaje</div>
+      </div>
+      <div class="grid">
+        <div class="tile" title="Ingresos / dotación en el período.">
+          <span class="tip">Def.</span>
+          <div class="value">12,09 %</div>
+          <div class="label">Tasa de contratación</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Ingresos (altas) del período / dotación promedio del período."></span>
+          <div class="take">Ritmo de ingreso consistente con expansión.</div>
+        </div>
+        <div class="tile" title="Relación entre selección y primeras salidas.">
+          <span class="tip">Nota</span>
+          <div class="value">3,07 %</div>
+          <div class="label">Rotación 1er año (fricción)</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Primeras salidas (antigüedad ≤ 12 meses) / dotación promedio."></span>
+          <div class="take">Ajustar perfilado, onboarding y expectativas.</div>
+        </div>
+      </div>
+    
+</div></section>
+
+    <section class="pillar" id="pilar-c">
+      <div class="phead">
+        <div class="ptitle"><span class="icon">👥</span>C. Crecimiento de Plantilla</div>
+        <div class="pdesc">Resultado neto del flujo</div>
+      </div>
+      <div class="grid">
+        <div class="tile" title="Δ dotación vs. año previo.">
+          <span class="tip">Def.</span>
+          <div class="value">3,72 %</div>
+          <div class="label">Variación A/A de colaboradores</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Crecimiento neto de headcount vs. el mismo corte del año anterior."></span>
+          <div class="take">Crecimiento moderado alineado a demanda.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pillar" id="pilar-d">
+      <div class="phead">
+        <div class="ptitle"><span class="icon">💵</span>D. Compensación</div>
+        <div class="pdesc">Competitividad y equidad</div>
+      </div>
+      <div class="grid">
+        <div class="tile" title="Δ gasto salarial anual.">
+          <span class="tip">Def.</span>
+          <div class="value">12,00 %</div>
+          <div class="label">Variación salarial A/A</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="((Gasto salarial anual – Gasto salarial anual previo)/Gasto salarial anual previo)."></span>
+          <div class="take">Alinear a mercado y mérito; cuidar equidad interna.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pillar" id="pilar-e">
+      <div class="phead">
+        <div class="ptitle"><span class="icon">⚖️</span>E. Diversidad</div>
+        <div class="pdesc">Composición por género</div>
+      </div>
+      <div class="grid">
+        <div class="tile" title="Mujeres / dotación.">
+          <span class="tip">Def.</span>
+          <div class="value">48 %</div>
+          <div class="label">Colaboradoras</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Proporción de mujeres sobre la dotación total."></span>
+          <div class="take">Buen balance; asegurar representación en liderazgo.</div>
+        </div>
+        <div class="tile" title="Hombres / dotación.">
+          <span class="tip">Def.</span>
+          <div class="value">52 %</div>
+          <div class="label">Colaboradores</div><span class="hint" tabindex="0" role="note" aria-label="Ayuda" data-tip="Proporción de hombres sobre la dotación total."></span>
+          <div class="take">Monitorear por unidad para evitar sesgos.</div>
+        </div>
+      </div>
+    </section>
+
+    
+      <div class="ribbons">
+        <div class="rib"><b>Variación salarial</b> ↔ <b>Rotación voluntaria</b>: compensación competitiva y meritocracia reducen salidas.</div>
+        <div class="rib"><b>Contratación</b> ↔ <b>Rotación 1er año</b>: calidad de selección y onboarding impactan permanencia temprana.</div>
+        <div class="rib"><b>Contratación – Rotación</b> → <b>Variación neta</b> de plantilla: base para plan de headcount.</div>
+      </div>
+    </section>
+
+    <section class="concl" id="decisiones">
+      <h2>Conclusiones & decisiones</h2>
+      <ul class="bullets">
+        <li><b>Retención:</b> riesgo moderado (7,03%). Acciones en engagement, liderazgo y desempeño.</li>
+        <li><b>Atracción:</b> contratación al 12,09% sostiene crecimiento neto (+3,72%). Fortalecer onboarding 30·60·90.</li>
+        <li><b>Compensación:</b> +12,00% — verificar mercado/mérito y equidad por nivel/área.</li>
+        <li><b>Diversidad:</b> 48%/52% — mantener balance y seguimiento por niveles.</li>
+      </ul>
+      <ul class="bullets" style="margin-top:8px">
+        <li><b>Ask:</b> aprobar plan 90 días, habilitar fuentes de datos (HRIS, comp, selección), nombrar sponsor y líder, y agendar kick-off.</li>
+      </ul>
+    </section>
+
+    <footer>© Banco Promerica — Informe ejecutivo de RRHH · Actualizado al 31/07/2025.</footer>
+  </main>
+
+  <script>
+    // Focus mode toggle
+    const focusBtn = document.getElementById('focusBtn');
+    focusBtn.addEventListener('click', () => {
+      document.body.classList.toggle('focus');
+      focusBtn.textContent = document.body.classList.contains('focus') ? 'Salir de foco' : 'Modo foco';
+    });
+  </script>
+</body>
+</html>
