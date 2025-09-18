@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="es-CR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mujeres en Promerica: datos para validar hipótesis de negocio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    :root{
+      --brand-green:#0a8f43;        /* ajustable si lo requieren */
+      --brand-green-2:#2fb36b;
+      --gray-900:#1f2937; --gray-700:#374151; --gray-600:#6b7280; --gray-300:#d1d5db; --gray-200:#e5e7eb; --gray-100:#f3f4f6;
+      --bg:#ffffff; --card:#ffffff;
+      --shadow:0 10px 20px rgba(0,0,0,.06);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--gray-900);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif}
+    .container{max-width:1200px;margin:0 auto;padding:24px}
+    .hero{padding:28px 24px 12px 24px;border-radius:var(--radius);background:linear-gradient(135deg,#f7fbf9, #ffffff)}
+    h1{margin:0;font-size:clamp(24px,3.6vw,40px);line-height:1.15;font-weight:800;letter-spacing:-.015em}
+    .sub{margin-top:10px;color:var(--gray-600);font-size:14px}
+    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .badge{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 12px;background:#f2fff7;border:1px solid rgba(10,143,67,.15);color:var(--brand-green);font-weight:600}
+    .grid{display:grid;gap:16px}
+    .kpi-grid{grid-template-columns:repeat(1,minmax(0,1fr))}
+    .two{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .four{grid-template-columns:repeat(4,minmax(0,1fr))}
+    @media (min-width:720px){.kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+    .card{background:var(--card);border:1px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+    .card h3{margin:.2rem 0 .6rem 0;font-size:16px;color:var(--gray-700)}
+    .kpi-value{font-size:28px;font-weight:800;letter-spacing:-.02em}
+    .kpi-delta{display:flex;align-items:center;gap:8px;font-weight:700}
+    .delta-up{color:var(--brand-green)}
+    .delta-down{color:#b91c1c}
+    .muted{color:var(--gray-600)}
+    canvas{width:100% !important;height:340px !important}
+    .section-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .section-title h2{font-size:22px;margin:0}
+    .pill{border:1px solid var(--gray-200);border-radius:999px;padding:6px 10px;font-size:12px;color:var(--gray-700);background:#fff}
+    .insights{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:10px;margin-top:10px}
+    @media (min-width:880px){.insights{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    .insights .i{background:#f9fafb;border:1px dashed var(--gray-300);border-radius:12px;padding:10px;font-size:13px;color:var(--gray-700)}
+    .note{font-size:12px;color:var(--gray-600)}
+    .legend{display:flex;gap:14px;align-items:center;margin-top:6px}
+    .dot{width:10px;height:10px;border-radius:999px;display:inline-block}
+    .dot.f{background:var(--brand-green)}
+    .dot.m{background:var(--gray-600)}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero" data-aos="fade-up">
+      <h1>Mujeres en Promerica: datos para validar hipótesis de negocio</h1>
+      <p class="sub">Panel interactivo (client‑side) con datos provenientes del Excel embebido.</p>
+      <div class="badges">
+        <span class="badge">H1 · Las clientas son más fieles (vinculación y activación)</span>
+        <span class="badge">H2 · Bancarización en crecimiento (cantidad, saldos, rentabilidad)</span>
+        <span class="badge">H3 · Mujeres con mejor pago (tasa de riesgo)</span>
+      </div>
+    </section>
+
+    <section style="margin-top:18px" class="grid kpi-grid" id="kpis" data-aos="fade-up">
+      <!-- KPIs render here -->
+    </section>
+
+    <section style="margin-top:22px" data-aos="fade-up">
+      <div class="section-title">
+        <h2>H1 · Fidelidad (Vinculación y Activación)</h2>
+        <span class="pill">FEMENINO <span class="dot f"></span> · MASCULINO <span class="dot m"></span></span>
+      </div>
+      <div class="grid two" style="margin-top:10px" id="fidelidad">
+        <!-- Vinculación / Activación por género -->
+      </div>
+    </section>
+
+    <section style="margin-top:22px" data-aos="fade-up">
+      <div class="section-title">
+        <h2>H2 · Bancarización en crecimiento</h2>
+        <span class="pill">Interanual 2024 vs 2025</span>
+      </div>
+      <div class="grid two" style="margin-top:10px">
+        <div class="card"><h3>Cantidad de Clientas (interanual)</h3><canvas id="chart_cantidad_interanual" aria-label="Cantidad Clientas interanual" role="img"></canvas></div>
+        <div class="card"><h3>Saldo total de Clientas (interanual)</h3><canvas id="chart_saldos_interanual" aria-label="Saldo interanual" role="img"></canvas></div>
+      </div>
+      <div class="grid two" style="margin-top:10px">
+        <div class="card"><h3>Rentabilidad por género (2025)</h3><canvas id="chart_rentabilidad_genero" aria-label="Rentabilidad por género" role="img"></canvas></div>
+        <div class="card"><h3>Saldo mediano por género (2025)</h3><canvas id="chart_mediana_genero" aria-label="Mediana de saldos por género" role="img"></canvas></div>
+      </div>
+      <div class="insights" id="insights_h2"></div>
+    </section>
+
+    <section style="margin-top:22px" data-aos="fade-up">
+      <div class="section-title">
+        <h2>Tasa de default a más de 90 días en los primeros 12 meses (por género)</h2>
+        <span class="pill">Serie mensual</span>
+      </div>
+      <div class="card" style="margin-top:10px">
+        <div class="legend"><span class="dot f"></span> FEMENINO <span class="dot m" style="margin-left:10px"></span> MASCULINO</div>
+        <canvas id="chart_riesgo" aria-label="Tasa de riesgo por género" role="img"></canvas>
+      </div>
+    </section>
+
+    <section style="margin:20px 0" data-aos="fade-up">
+      <div class="card">
+        <h3>Notas y metadatos</h3>
+        <p class="note">Fuente: Excel cargado por el usuario, procesado 100% en el navegador (sin enviar datos a servidores). Fecha de actualización automática según el último mes detectado.</p>
+        <p class="note" id="last_update"></p>
+        <p class="note">Glosario (resumen): Vinculación/Activación = índices de relación/uso de productos; Rentabilidad = contribución neta/porcentual; Tasa de riesgo = % cuentas que caen >90d en 12m.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Librerías -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script>
+  AOS.init({ once:true, duration:700, easing:'ease-out-cubic' });
+
+  // ================================================
+  // 1) Excel embebido (base64) & utilidades
+  // ================================================
+  // NOTA: Este string proviene del archivo 'Datos.xlsx' que nos compartiste.
+  const EXCEL_BASE64 = "{{B64_PLACEHOLDER}}";
+
+  function parseLatAmNumber(str){
+    if (str === null || str === undefined) return null;
+    if (typeof str === 'number') return str;
+    let s = String(str).trim();
+    if (!s) return null;
+    // remove any non-numeric except digits, dots and commas and minus
+    s = s.replace(/[^0-9,.-]/g, '');
+    // if both comma and dot present, assume dot thousands & comma decimal
+    if (s.includes(',') && s.includes('.')){
+      s = s.replace(/\./g,'').replace(',', '.');
+    } else if (s.includes(',') && !s.includes('.')){
+      // only comma -> decimal comma
+      s = s.replace(',', '.');
+    }
+    const v = Number(s);
+    return Number.isFinite(v) ? v : null;
+  }
+  const nf = new Intl.NumberFormat('es-CR');
+  const pf = new Intl.NumberFormat('es-CR',{style:'percent',minimumFractionDigits:1, maximumFractionDigits:1});
+  const df = new Intl.DateTimeFormat('es-CR',{ year:'numeric', month:'short'});
+
+  function monthShort(m){
+    const map = {Ene: 'Ene', Feb:'Feb', Mar:'Mar', Abr:'Abr', May:'May', Jun:'Jun', Jul:'Jul', Ago:'Ago', Sep:'Sep', Oct:'Oct', Nov:'Nov', Dic:'Dic'};
+    return map[m] || m;
+  }
+
+  // ================================================
+  // 2) Cargar y tokenizar hoja en memoria
+  // ================================================
+  const wb = XLSX.read(EXCEL_BASE64, {type:'base64'});
+  const firstSheetName = wb.SheetNames[0];
+  const ws = wb.Sheets[firstSheetName];
+  const rows = XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:null});
+
+  // Utilidad: encontrar una fila que contenga TODOS los tokens (case-insensitive)
+  function findRowByTokens(tokens){
+    const T = tokens.map(t=>String(t).toLowerCase());
+    for(let r=0; r<rows.length; r++){
+      const cells = rows[r].map(c=> (c==null? '': String(c)).toLowerCase().trim());
+      if(T.every(t => cells.some(c=> c === t || c.includes(t)))) return r;
+    }
+    return -1;
+  }
+
+  // Utilidad: encontrar índice de columna por token en una fila específica
+  function findColInRow(r, token){
+    const t = String(token).toLowerCase();
+    const cells = rows[r].map(c=> (c==null? '': String(c)).toLowerCase().trim());
+    return cells.findIndex(c=> c===t || c.includes(t));
+  }
+
+  // Extrae tabla tipo "Mes | 2024 | 2025" desde una fila encabezado
+  function extractInteranualFromHeaderRow(r){
+    const cMes = findColInRow(r,'mes');
+    const c2024 = findColInRow(r,'2024');
+    const c2025 = findColInRow(r,'2025');
+    if(cMes<0 || c2024<0 || c2025<0) return null;
+    const data=[];
+    for(let i=r+1;i<rows.length;i++){
+      const m = rows[i][cMes];
+      if(!m) break;
+      const v24 = parseLatAmNumber(rows[i][c2024]);
+      const v25 = parseLatAmNumber(rows[i][c2025]);
+      data.push({mes:String(m), y2024:v24, y2025:v25});
+    }
+    return data.length? data: null;
+  }
+
+  // Tabla: Cantidad por Género 2025 (Mes | Femenino Clientes | Femenino % | Masculino Clientes | Masculino %)
+  function extractCantidadGenero2025(){
+    // Buscar fila que tenga tanto "Femenino Clientes" como "Masculino Clientes"
+    let r=-1;
+    for(let i=0;i<rows.length;i++){
+      const cells = rows[i].map(c=> (c==null?'':String(c)).toLowerCase());
+      if(cells.some(x=>x.includes('femenino clientes')) && cells.some(x=>x.includes('masculino clientes'))){ r=i; break; }
+    }
+    if(r<0) return null;
+    const cMes = findColInRow(r,'mes');
+    const cFem = findColInRow(r,'femenino clientes');
+    const cFemP = findColInRow(r,'femenino %');
+    const cMas = findColInRow(r,'masculino clientes');
+    const cMasP = findColInRow(r,'masculino %');
+    const data=[];
+    for(let i=r+1;i<rows.length;i++){
+      const m = rows[i][cMes];
+      if(!m) break;
+      data.push({mes:String(m), fem:parseLatAmNumber(rows[i][cFem]), femP:parseLatAmNumber(rows[i][cFemP]), mas:parseLatAmNumber(rows[i][cMas]), masP:parseLatAmNumber(rows[i][cMasP])});
+    }
+    return data.length? data:null;
+  }
+
+  // Tabla: Rentabilidad por Género 2025 (Mes|Femenino|Masculino)
+  function extractRentabilidad2025(){
+    // Buscar fila que tenga Mes, Femenino, Masculino, y que arriba/derecha haya texto relacionado a rentabilidad
+    let r=-1;
+    for(let i=0;i<rows.length;i++){
+      const cells = rows[i].map(c=> (c==null?'':String(c)).toLowerCase());
+      if(cells.includes('mes') && cells.includes('femenino') && cells.includes('masculino')){
+        const prev = rows[Math.max(0,i-1)].map(c=> (c==null?'':String(c)).toLowerCase()).join(' ');
+        if(prev.includes('rentabilidad')){ r=i; break; }
+      }
+    }
+    if(r<0) return null;
+    const cMes = findColInRow(r,'mes');
+    const cFem = findColInRow(r,'femenino');
+    const cMas = findColInRow(r,'masculino');
+    const data=[];
+    for(let i=r+1;i<rows.length;i++){
+      const m = rows[i][cMes];
+      if(!m) break;
+      data.push({mes:String(m), fem:parseLatAmNumber(rows[i][cFem]), mas:parseLatAmNumber(rows[i][cMas])});
+    }
+    return data.length? data:null;
+  }
+
+  // Tabla: Mediana de Saldo por Género 2025 (Mes | Femenino Mediana de Saldo | Femenino % | Masculino Mediana de Saldo | Masculino %)
+  function extractMedianaSaldo2025(){
+    let r=-1;
+    for(let i=0;i<rows.length;i++){
+      const cells = rows[i].map(c=> (c==null?'':String(c)).toLowerCase());
+      if(cells.some(x=>x.includes('femenino mediana')) && cells.some(x=>x.includes('masculino mediana'))){ r=i; break; }
+    }
+    if(r<0) return null;
+    const cMes  = findColInRow(r,'mes');
+    const cFemM = findColInRow(r,'femenino mediana');
+    const cFemP = findColInRow(r,'femenino %');
+    const cMasM = findColInRow(r,'masculino mediana');
+    const cMasP = findColInRow(r,'masculino %');
+    const data=[];
+    for(let i=r+1;i<rows.length;i++){
+      const m = rows[i][cMes];
+      if(!m) break;
+      data.push({mes:String(m), fem:parseLatAmNumber(rows[i][cFemM]), femP:parseLatAmNumber(rows[i][cFemP]), mas:parseLatAmNumber(rows[i][cMasM]), masP:parseLatAmNumber(rows[i][cMasP])});
+    }
+    return data.length? data:null;
+  }
+
+  // Tabla: Saldos Interanual (Mes|2024|2025) — en esta hoja aparece en otra zona (FECHA.2 / GÉNERO.2 / IV vinculación ...). Usamos búsqueda por fila con Mes+2024+2025.
+  function extractInteranualGeneric(){
+    const r = findRowByTokens(['mes','2024','2025']);
+    if(r<0) return null;
+    return extractInteranualFromHeaderRow(r);
+  }
+
+  // Serie: Riesgo >90d 12m por género. Buscar cualquier trío FECHA / GÉNERO / TASA
+  function extractRiesgo(){
+    const candidates=[];
+    for(let r=0;r<rows.length;r++){
+      const cells = rows[r].map(c=> (c==null?'':String(c)).toLowerCase());
+      if(cells.includes('fecha') && cells.includes('género') && cells.some(x=> x==='tasa' || x.includes('tasa de riesgo'))){
+        const cF = findColInRow(r,'fecha');
+        const cG = findColInRow(r,'género');
+        let cT = findColInRow(r,'tasa de riesgo');
+        if(cT<0) cT = findColInRow(r,'tasa');
+        let i=r+1; const out=[];
+        for(; i<rows.length; i++){
+          const f = rows[i][cF];
+          const g = rows[i][cG];
+          const t = rows[i][cT];
+          if(!f || !g) break;
+          const dt = (f instanceof Date) ? f : (typeof f==='string' && f ? new Date(f) : null);
+          out.push({fecha: dt ? dt.toISOString().slice(0,10) : String(f), genero: String(g).toUpperCase(), tasa: parseLatAmNumber(t)});
+        }
+        if(out.length) candidates.push(out);
+      }
+    }
+    // Unir candidatos por si existen dos bloques
+    const all=[].concat(...candidates);
+    // ordenar por fecha
+    all.sort((a,b)=> (a.fecha>b.fecha?1:-1));
+    return all;
+  }
+
+  // Interanual #1 (cantidad) y #2 (saldos) pueden compartir cabecera; en esta hoja hay 2 interanuales: uno de cantidad (valores alrededor de 100-115 mil) y otro de saldos (del orden de 1e8-1e9). Los distinguimos por magnitud.
+  const interanual = extractInteranualGeneric() || [];
+  let cantidad_inter = null, saldos_inter = null;
+  if(interanual && interanual.length){
+    const isSaldo = v => Math.abs(v||0) > 1e6; // heurística
+    const mean25 = interanual.map(r=> r.y2025||0).filter(Boolean).reduce((a,b)=>a+b,0)/(interanual.filter(r=> r.y2025!=null).length||1);
+    if(isSaldo(mean25)) saldos_inter = interanual; else cantidad_inter = interanual;
+  }
+  // Además, en la hoja hay otro interanual (el que no capturó arriba). Buscamos otro encabezado igual más abajo.
+  function extractSecondInteranual(excludeRow){
+    let start = (excludeRow||0)+1; let found=-1;
+    for(let r=start; r<rows.length; r++){
+      const cells = rows[r].map(c=> (c==null?'':String(c)).toLowerCase());
+      if(cells.includes('mes') && cells.includes('2024') && cells.includes('2025')){ found=r; break; }
+    }
+    if(found<0) return null; return extractInteranualFromHeaderRow(found);
+  }
+  // Intentar detectar el otro (si el primero fue cantidad, el segundo será saldos, o viceversa)
+  const inter2 = extractSecondInteranual(findRowByTokens(['mes','2024','2025'])) || [];
+  if(inter2 && inter2.length){
+    const mean25_2 = inter2.map(r=> r.y2025||0).filter(Boolean).reduce((a,b)=>a+b,0)/(inter2.filter(r=> r.y2025!=null).length||1);
+    const isSaldo2 = Math.abs(mean25_2||0) > 1e6;
+    if(isSaldo2){ saldos_inter = saldos_inter || inter2; } else { cantidad_inter = cantidad_inter || inter2; }
+  }
+
+  const cant_genero_2025 = extractCantidadGenero2025();
+  const renta_2025 = extractRentabilidad2025();
+  const mediana_2025 = extractMedianaSaldo2025();
+  const riesgo = extractRiesgo();
+
+  // Último mes común 2024-2025 en interanuales
+  function lastCommonMonth(inter){
+    if(!inter || !inter.length) return null;
+    for(let i=inter.length-1;i>=0;i--){ if(inter[i].y2024!=null && inter[i].y2025!=null) return inter[i]; }
+    return null;
+  }
+
+  // ================================================
+  // 3) Render KPIs
+  // ================================================
+  function kpiDeltaHTML(delta){
+    if(delta==null) return '<span class="muted">—</span>';
+    const cls = delta>=0? 'delta-up':'delta-down';
+    const arrow = delta>=0? '▲':'▼';
+    return `<span class="kpi-delta ${cls}">${arrow} ${ (delta*100).toFixed(1) }% YoY</span>`;
+  }
+
+  const kpisEl = document.getElementById('kpis');
+  function renderKPIs(){
+    // 1) Clientas activas (interanual de cantidad)
+    let kpi1 = {title:'Clientas activas (YTD)', value:'—', deltaHTML:'<span class="muted">No disponible</span>'};
+    if(cantidad_inter){
+      const lc = lastCommonMonth(cantidad_inter);
+      if(lc){ kpi1.value = `${nf.format(lc.y2025)} (\u00FAlt.: ${lc.mes})`; const d=(lc.y2025-lc.y2024)/lc.y2024; kpi1.deltaHTML=kpiDeltaHTML(d); }
+    }
+
+    // 2) Saldos de clientas (interanual)
+    let kpi2 = {title:'Saldos de clientas (YTD)', value:'—', deltaHTML:'<span class="muted">No disponible</span>'};
+    if(saldos_inter){
+      const lc = lastCommonMonth(saldos_inter);
+      if(lc){ kpi2.value = `${nf.format(lc.y2025)} (\u00FAlt.: ${lc.mes})`; const d=(lc.y2025-lc.y2024)/lc.y2024; kpi2.deltaHTML=kpiDeltaHTML(d); }
+    }
+
+    // 3) Rentabilidad YTD (promedio del último mes disponible entre F y M)
+    let kpi3 = {title:'Rentabilidad (YTD, 2025)', value:'—', deltaHTML:'<span class="muted">F / M</span>'};
+    if(renta_2025 && renta_2025.length){
+      const last = renta_2025[renta_2025.length-1];
+      const prom = ( (last.fem||0) + (last.mas||0) )/2;
+      kpi3.value = `${prom.toFixed(2)}% (\u00FAlt.: ${last.mes})`;
+      kpi3.deltaHTML = `<span class="muted">F: ${last.fem?.toFixed(2)}% · M: ${last.mas?.toFixed(2)}%</span>`;
+    }
+
+    // 4) Tasa de riesgo última (por género)
+    let kpi4 = {title:'Riesgo >90d a 12m (\u00FAltimo)', value:'—', deltaHTML:'<span class="muted">—</span>'};
+    if(riesgo && riesgo.length){
+      const byGen = {FEMENINO:null,MASCULINO:null};
+      for(let i=riesgo.length-1;i>=0;i--){ const r=riesgo[i]; if(byGen[r.genero]==null && (r.tasa!=null)){ byGen[r.genero]=r; }
+        if(byGen.FEMENINO && byGen.MASCULINO) break; }
+      const latestDate = (byGen.FEMENINO?.fecha || byGen.MASCULINO?.fecha || '').slice(0,10);
+      const vF = byGen.FEMENINO? (byGen.FEMENINO.tasa*100).toFixed(2)+'%': '—';
+      const vM = byGen.MASCULINO? (byGen.MASCULINO.tasa*100).toFixed(2)+'%': '—';
+      kpi4.value = `F: ${vF}  ·  M: ${vM}`;
+      kpi4.deltaHTML = `<span class="muted">Fecha: ${latestDate||'—'}</span>`;
+    }
+
+    const cards=[kpi1,kpi2,kpi3,kpi4].map(k=>`
+      <div class="card" data-aos="fade-up">
+        <h3>${k.title}</h3>
+        <div class="kpi-value">${k.value}</div>
+        <div>${k.deltaHTML}</div>
+      </div>`).join('');
+    kpisEl.innerHTML = cards;
+  }
+
+  // ================================================
+  // 4) Gráficos
+  // ================================================
+  function baseLineOptions(unit){
+    return {
+      responsive:true,
+      interaction:{mode:'index', intersect:false},
+      plugins:{ legend:{display:true, labels:{ usePointStyle:true, boxWidth:10, color:'#111' }}, title:{display:false} },
+      scales:{
+        x:{ grid:{ display:false }, ticks:{ callback:(v,i,vals)=> i%2===0? this.getLabelForValue? this.getLabelForValue(v): vals[i]?.label : '' } },
+        y:{ grid:{ color:'rgba(0,0,0,.06)' }, ticks:{ callback:(v)=> unit==='money'? nf.format(v): v } }
+      },
+      elements:{ line:{ tension:.35, borderWidth:2.5 }, point:{ radius:2.5, hoverRadius:5 } }
+    };
+  }
+
+  function makeLineChart(ctx, labels, datasets, unit){
+    const ds = datasets.map(d=> ({...d, fill:false}));
+    return new Chart(ctx, { type:'line', data:{ labels, datasets:ds }, options: baseLineOptions(unit) });
+  }
+
+  // H2 gráficos
+  if(cantidad_inter){
+    const labels = cantidad_inter.map(r=> monthShort(r.mes));
+    makeLineChart(document.getElementById('chart_cantidad_interanual'), labels, [
+      {label:'2024', data:cantidad_inter.map(r=> r.y2024), borderColor: '#9ca3af', backgroundColor:'#9ca3af'},
+      {label:'2025', data:cantidad_inter.map(r=> r.y2025), borderColor: 'var(--brand-green)', backgroundColor:'var(--brand-green)'}
+    ]);
+  } else {
+    document.getElementById('chart_cantidad_interanual').parentElement.innerHTML += '<p class="muted">No se encontró la tabla de cantidad interanual.</p>';
+  }
+
+  if(saldos_inter){
+    const labels = saldos_inter.map(r=> monthShort(r.mes));
+    makeLineChart(document.getElementById('chart_saldos_interanual'), labels, [
+      {label:'2024', data:saldos_inter.map(r=> r.y2024), borderColor: '#9ca3af', backgroundColor:'#9ca3af'},
+      {label:'2025', data:saldos_inter.map(r=> r.y2025), borderColor: 'var(--brand-green)', backgroundColor:'var(--brand-green)'}
+    ], 'money');
+  } else {
+    document.getElementById('chart_saldos_interanual').parentElement.innerHTML += '<p class="muted">No se encontró la tabla de saldos interanual.</p>';
+  }
+
+  if(renta_2025){
+    const labels = renta_2025.map(r=> monthShort(r.mes));
+    makeLineChart(document.getElementById('chart_rentabilidad_genero'), labels, [
+      {label:'FEMENINO', data:renta_2025.map(r=> r.fem), borderColor:'var(--brand-green)', backgroundColor:'var(--brand-green)'},
+      {label:'MASCULINO', data:renta_2025.map(r=> r.mas), borderColor:'#6b7280', backgroundColor:'#6b7280'}
+    ]);
+  } else {
+    document.getElementById('chart_rentabilidad_genero').parentElement.innerHTML += '<p class="muted">No se encontró la tabla de rentabilidad 2025.</p>';
+  }
+
+  if(mediana_2025){
+    const labels = mediana_2025.map(r=> monthShort(r.mes));
+    makeLineChart(document.getElementById('chart_mediana_genero'), labels, [
+      {label:'FEMENINO', data:mediana_2025.map(r=> r.fem), borderColor:'var(--brand-green)', backgroundColor:'var(--brand-green)'},
+      {label:'MASCULINO', data:mediana_2025.map(r=> r.mas), borderColor:'#6b7280', backgroundColor:'#6b7280'}
+    ]);
+  } else {
+    document.getElementById('chart_mediana_genero').parentElement.innerHTML += '<p class="muted">No se encontró la tabla de mediana de saldo 2025.</p>';
+  }
+
+  // H1 Fidelidad — sólo si existen series por género (en este archivo no hay explícitas, por eso mostramos aviso)
+  (function(){
+    const cont = document.getElementById('fidelidad');
+    // Intento de detección (placeholder para datasets reales de Vinculación y Activación por género)
+    const vinc = null, act = null; // no hay en esta hoja por género
+    if(!vinc && !act){
+      const div = document.createElement('div');
+      div.className='card';
+      div.innerHTML='<h3>Vinculación / Activación</h3><p class="muted">No se encontró la hoja de Vinculación/Activación por género. Si la agregas al Excel con columnas Mes·FEMENINO·MASCULINO, la graficamos automáticamente.</p>';
+      cont.appendChild(div);
+    }
+  })();
+
+  // H3 Riesgo
+  if(riesgo && riesgo.length){
+    // Pivot por género
+    const byDate = {};
+    riesgo.forEach(r=>{
+      const k = r.fecha; byDate[k] = byDate[k] || {fecha:k};
+      if(r.genero.includes('FEMENINO')) byDate[k].fem = r.tasa*100; else if(r.genero.includes('MASCULINO')) byDate[k].mas = r.tasa*100;
+    });
+    const registros = Object.values(byDate).filter(r=> r.fem!=null || r.mas!=null).sort((a,b)=> a.fecha>b.fecha?1:-1);
+    const labels = registros.map(r=> r.fecha.slice(0,7));
+    const fem = registros.map(r=> r.fem ?? null);
+    const mas = registros.map(r=> r.mas ?? null);
+
+    makeLineChart(document.getElementById('chart_riesgo'), labels, [
+      {label:'FEMENINO', data:fem, borderColor:'var(--brand-green)', backgroundColor:'var(--brand-green)'},
+      {label:'MASCULINO', data:mas, borderColor:'#6b7280', backgroundColor:'#6b7280'}
+    ]);
+  } else {
+    document.getElementById('chart_riesgo').parentElement.innerHTML += '<p class="muted">No se encontró la serie de riesgo.</p>';
+  }
+
+  // ================================================
+  // 5) Insights y metadatos
+  // ================================================
+  (function(){
+    const ins = document.getElementById('insights_h2');
+    const bullets=[];
+    const lcCant = lastCommonMonth(cantidad_inter||[]);
+    const lcSal = lastCommonMonth(saldos_inter||[]);
+    if(lcCant){ bullets.push(`Clientas activas crecen <b>${((lcCant.y2025-lcCant.y2024)/lcCant.y2024*100).toFixed(1)}% YoY</b> (YTD: ${lcCant.mes}).`); }
+    if(renta_2025 && renta_2025.length>=2){
+      const last=renta_2025[renta_2025.length-1], prev=renta_2025[renta_2025.length-2];
+      const gap = (last.fem - last.mas).toFixed(2);
+      const trend = (( (last.fem+last.mas)/2 ) - ( (prev.fem+prev.mas)/2 )).toFixed(2);
+      bullets.push(`Rentabilidad femenina supera a masculina en <b>${gap} p.p.</b> (${last.mes}). Tendencia 3m: <b>${trend} p.p.</b>`);
+    }
+    if(riesgo && riesgo.length){
+      const byGen = {F:[], M:[]};
+      riesgo.forEach(r=>{ if(r.genero.startsWith('F')) byGen.F.push(r); else if(r.genero.startsWith('M')) byGen.M.push(r); });
+      const lastF = byGen.F[byGen.F.length-1], lastM = byGen.M[byGen.M.length-1];
+      if(lastF && lastM){ bullets.push(`Tasa de riesgo femenina se mantiene <b>${((lastM.tasa-lastF.tasa)*100).toFixed(2)} p.p.</b> por debajo de la masculina (\u00FAlt.: ${lastF.fecha.slice(0,7)}).`); }
+    }
+    ins.innerHTML = bullets.map(b=>`<div class="i">${b}</div>`).join('');
+
+    const lastMonth = lcSal?.mes || lcCant?.mes || (renta_2025?.[renta_2025.length-1]?.mes) || '';
+    document.getElementById('last_update').textContent = lastMonth ? `Último mes detectado: ${lastMonth}` : '';
+  })();
+
+  </script>
+</body>
+</html>
