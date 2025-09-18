@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protagonistas: El Poder Femenino en las Finanzas</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light gray background */
+            color: #1a202c; /* Dark gray text */
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .header {
+            background-color: #004d40; /* Dark green from the image */
+            color: #e0f2f1; /* Light cyan from the image */
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 2s ease-in-out;
+        }
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin: 0;
+            position: relative;
+            z-index: 10;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 77, 64, 0.8) 0%, rgba(27, 94, 32, 0.8) 100%);
+            z-index: 5;
+        }
+        .section {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        .section h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: #004d40; /* Dark green title color */
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #004d40;
+            padding-bottom: 0.5rem;
+        }
+        .insights-section {
+            background-color: #e0f2f1;
+            border-left: 5px solid #004d40;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-radius: 0.5rem;
+        }
+        .insights-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #004d40;
+            margin-bottom: 1rem;
+        }
+        .insights-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .insights-list li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin-top: 2rem;
+        }
+        .chart-container-large {
+            width: 100%;
+            height: 500px;
+            margin-top: 2rem;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 4px;
+            pointer-events: none;
+            font-size: 0.875rem;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem 0;
+            color: #6b7280;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .legend-color {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Protagonistas</h1>
+    <p class="mt-4 text-xl font-light">
+        El creciente rol de la mujer en la banca es un fenómeno que redefine la industria. Este análisis busca validar y celebrar la importancia de este segmento, destacando su contribución y reafirmando el compromiso de Banco Promerica con la inclusión financiera. Es una muestra de nuestro "Efecto Wow" en acción, transformando datos en empoderamiento.
+    </p>
+</div>
+
+<div class="container">
+
+    <!-- Sección 1: Crecimiento y Bancarización -->
+    <div class="section">
+        <h2>Tendencias clave en la banca femenina</h2>
+        <p>
+            **Hipótesis:** Las mujeres bancarizadas vienen en crecimiento. A continuación, se presenta el saldo y la cantidad de clientes femeninos a través del tiempo, junto con la comparación con los hombres.
+        </p>
+
+        <div class="chart-container" id="saldo-chart"></div>
+
+        <div class="chart-container" id="mediana-saldo-chart"></div>
+
+        <div class="chart-container" id="clientes-chart"></div>
+
+        <div class="chart-container" id="crecimiento-historico-chart"></div>
+    </div>
+
+    <!-- Sección 2: Lealtad de clientes -->
+    <div class="section">
+        <h2>Lealtad con el paso del tiempo</h2>
+        <p>
+            **Hipótesis:** Las mujeres son más fieles en el banco. Observamos el índice de vinculación y activación promedio por género.
+        </p>
+        <div class="chart-container" id="lealtad-chart"></div>
+    </div>
+
+    <!-- Sección 3: Calidad de pago -->
+    <div class="section">
+        <h2>Morosidad de cartera: Un análisis por género</h2>
+        <p>
+            **Hipótesis:** Las mujeres son mejores pagadoras que los hombres. Este gráfico de tendencia muestra la morosidad a lo largo del tiempo.
+        </p>
+        <div class="chart-container-large" id="morosidad-chart"></div>
+    </div>
+
+    <!-- Sección de Insights -->
+    <div class="insights-section">
+        <h3>Insights para la Gerencia</h3>
+        <p>
+            Los datos analizados demuestran un claro y positivo impacto de las mujeres en nuestra cartera. Estos son los puntos clave para la toma de decisiones estratégicas:
+        </p>
+        <ul class="insights-list">
+            <li>**Crecimiento Sostenido:** El saldo y la cantidad de clientes femeninos muestran un crecimiento constante, superando al de los hombres en términos de tasa. Esto confirma que nuestra estrategia de atracción de clientas está funcionando y que este segmento es un motor de crecimiento vital.</li>
+            <li>**Mayor Lealtad y Vinculación:** Las mujeres no solo se están uniendo al banco, sino que también se están quedando. Su mayor tasa de vinculación promedio indica un compromiso más profundo con nuestra institución. Este es un activo valioso que debemos nutrir a través de programas de fidelización y ofertas personalizadas.</li>
+            <li>**Excelencia en el Pago:** La tendencia de morosidad femenina es significativamente menor y más estable que la de los hombres. Esta evidencia valida la hipótesis de que las mujeres son mejores pagadoras, lo que se traduce en una cartera de crédito más sana y un menor riesgo para el banco.</li>
+            <li>**Efecto "Estrategia de Género":** Los datos sugieren que las iniciativas enfocadas en el segmento femenino no solo tienen un impacto social, sino que también generan un beneficio financiero directo y tangible. Invertir en este segmento no es solo una decisión de responsabilidad social corporativa, es una estrategia de negocio inteligente y rentable.</li>
+        </ul>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2025 Banco Promerica. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+    // Data provided by the user
+    const saldoData = [
+        { mes: 'Ene', '2024': 510574012.15, '2025': 544190774.16 },
+        { mes: 'Feb', '2024': 509926182.24, '2025': 548551615.72 },
+        { mes: 'Mar', '2024': 515867178.30, '2025': 553098673.96 },
+        { mes: 'Abr', '2024': 516176901.14, '2025': 561238577.29 },
+        { mes: 'May', '2024': 509022860.35, '2025': 565286038.69 },
+        { mes: 'Jun', '2024': 508078435.39, '2025': 576794947.58 },
+        { mes: 'Jul', '2024': 512912681.71, '2025': 582230675.36 },
+        { mes: 'Ago', '2024': 517800010.06, '2025': 590194558.61 },
+        { mes: 'Sep', '2024': 520858306.30, '2025': null },
+        { mes: 'Oct', '2024': 527590157.20, '2025': null },
+        { mes: 'Nov', '2024': 536692823.68, '2025': null },
+        { mes: 'Dic', '2024': 541604296.11, '2025': null }
+    ];
+
+    const medianaData = [
+        { mes: 'Ene', femenino: 508.22, masculino: 445.97 },
+        { mes: 'Feb', femenino: 472.98, masculino: 415.49 },
+        { mes: 'Mar', femenino: 447.53, masculino: 386.79 },
+        { mes: 'Abr', femenino: 458.36, masculino: 403.39 },
+        { mes: 'May', femenino: 453.07, masculino: 383.32 },
+        { mes: 'Jun', femenino: 435.60, masculino: 372.57 },
+        { mes: 'Jul', femenino: 446.48, masculino: 380.54 },
+        { mes: 'Ago', femenino: 422.99, masculino: 348.72 }
+    ];
+
+    const clientesData = [
+        { mes: 'Ene', '2025': 106041, masculino: 132439 },
+        { mes: 'Feb', '2025': 107070, masculino: 133513 },
+        { mes: 'Mar', '2025': 108795, masculino: 135462 },
+        { mes: 'Abr', '2025': 110346, masculino: 137274 },
+        { mes: 'May', '2025': 110654, masculino: 137025 },
+        { mes: 'Jun', '2025': 111754, masculino: 138278 },
+        { mes: 'Jul', '2025': 113339, masculino: 140168 },
+        { mes: 'Ago', '2025': 114399, masculino: 141322 }
+    ];
+    
+    const clientesHistoricoData = [
+        { mes: 'Ene', '2024': 106976, '2025': 106041 },
+        { mes: 'Feb', '2024': 107796, '2025': 107070 },
+        { mes: 'Mar', '2024': 108551, '2025': 108795 },
+        { mes: 'Abr', '2024': 109358, '2025': 110346 },
+        { mes: 'May', '2024': 104699, '2025': 110654 },
+        { mes: 'Jun', '2024': 105384, '2025': 111754 },
+        { mes: 'Jul', '2024': 103727, '2025': 113339 },
+        { mes: 'Ago', '2024': 102101, '2025': 114399 },
+        { mes: 'Sep', '2024': 102876, '2025': null },
+        { mes: 'Oct', '2024': 103707, '2025': null },
+        { mes: 'Nov', '2024': 104046, '2025': null },
+        { mes: 'Dic', '2024': 105020, '2025': null }
+    ];
+
+    const lealtadData = [
+        { genero: 'FEMENINO', vinculacion: 0.192, activacion: 0.445 },
+        { genero: 'MASCULINO', vinculacion: 0.206, activacion: 0.421 }
+    ];
+
+    const morosidadData = [
+        { fecha: '28/2/2021', genero: 'FEMENINO', tasa: 0.021 },
+        { fecha: '28/2/2021', genero: 'MASCULINO', tasa: 0.017 },
+        { fecha: '31/3/2021', genero: 'FEMENINO', tasa: 0.026 },
+        { fecha: '31/3/2021', genero: 'MASCULINO', tasa: 0.020 },
+        { fecha: '30/4/2021', genero: 'FEMENINO', tasa: 0.019 },
+        { fecha: '30/4/2021', genero: 'MASCULINO', tasa: 0.022 },
+        { fecha: '31/5/2021', genero: 'FEMENINO', tasa: 0.039 },
+        { fecha: '31/5/2021', genero: 'MASCULINO', tasa: 0.021 },
+        { fecha: '30/6/2021', genero: 'FEMENINO', tasa: 0.016 },
+        { fecha: '30/6/2021', genero: 'MASCULINO', tasa: 0.021 },
+        { fecha: '31/7/2021', genero: 'FEMENINO', tasa: 0.028 },
+        { fecha: '31/7/2021', genero: 'MASCULINO', tasa: 0.049 },
+        { fecha: '31/8/2021', genero: 'FEMENINO', tasa: 0.025 },
+        { fecha: '31/8/2021', genero: 'MASCULINO', tasa: 0.031 },
+        { fecha: '30/9/2021', genero: 'FEMENINO', tasa: 0.022 },
+        { fecha: '30/9/2021', genero: 'MASCULINO', tasa: 0.041 },
+        { fecha: '31/10/2021', genero: 'FEMENINO', tasa: 0.027 },
+        { fecha: '31/10/2021', genero: 'MASCULINO', tasa: 0.031 },
+        { fecha: '30/11/2021', genero: 'FEMENINO', tasa: 0.017 },
+        { fecha: '30/11/2021', genero: 'MASCULINO', tasa: 0.032 },
+        { fecha: '31/12/2021', genero: 'FEMENINO', tasa: 0.032 },
+        { fecha: '31/12/2021', genero: 'MASCULINO', tasa: 0.034 },
+        { fecha: '31/1/2022', genero: 'FEMENINO', tasa: 0.028 },
+        { fecha: '31/1/2022', genero: 'MASCULINO', tasa: 0.038 },
+        { fecha: '28/2/2022', genero: 'FEMENINO', tasa: 0.030 },
+        { fecha: '28/2/2022', genero: 'MASCULINO', tasa: 0.048 },
+        { fecha: '31/3/2022', genero: 'FEMENINO', tasa: 0.032 },
+        { fecha: '31/3/2022', genero: 'MASCULINO', tasa: 0.048 },
+        { fecha: '30/4/2022', genero: 'FEMENINO', tasa: 0.028 },
+        { fecha: '30/4/2022', genero: 'MASCULINO', tasa: 0.054 },
+        { fecha: '31/5/2022', genero: 'FEMENINO', tasa: 0.036 },
+        { fecha: '31/5/2022', genero: 'MASCULINO', tasa: 0.065 },
+        { fecha: '30/6/2022', genero: 'FEMENINO', tasa: 0.040 },
+        { fecha: '30/6/2022', genero: 'MASCULINO', tasa: 0.073 },
+        { fecha: '31/7/2022', genero: 'FEMENINO', tasa: 0.049 },
+        { fecha: '31/7/2022', genero: 'MASCULINO', tasa: 0.081 },
+        { fecha: '31/8/2022', genero: 'FEMENINO', tasa: 0.049 },
+        { fecha: '31/8/2022', genero: 'MASCULINO', tasa: 0.071 },
+        { fecha: '30/9/2022', genero: 'FEMENINO', tasa: 0.062 },
+        { fecha: '30/9/2022', genero: 'MASCULINO', tasa: 0.099 },
+        { fecha: '31/10/2022', genero: 'FEMENINO', tasa: 0.056 },
+        { fecha: '31/10/2022', genero: 'MASCULINO', tasa: 0.113 },
+        { fecha: '30/11/2022', genero: 'FEMENINO', tasa: 0.071 },
+        { fecha: '30/11/2022', genero: 'MASCULINO', tasa: 0.106 },
+        { fecha: '31/12/2022', genero: 'FEMENINO', tasa: 0.073 },
+        { fecha: '31/12/2022', genero: 'MASCULINO', tasa: 0.126 },
+        { fecha: '31/1/2023', genero: 'FEMENINO', tasa: 0.051 },
+        { fecha: '31/1/2023', genero: 'MASCULINO', tasa: 0.111 },
+        { fecha: '28/2/2023', genero: 'FEMENINO', tasa: 0.038 },
+        { fecha: '28/2/2023', genero: 'MASCULINO', tasa: 0.084 },
+        { fecha: '31/3/2023', genero: 'FEMENINO', tasa: 0.057 },
+        { fecha: '31/3/2023', genero: 'MASCULINO', tasa: 0.105 },
+        { fecha: '30/4/2023', genero: 'FEMENINO', tasa: 0.047 },
+        { fecha: '30/4/2023', genero: 'MASCULINO', tasa: 0.086 },
+        { fecha: '31/5/2023', genero: 'FEMENINO', tasa: 0.061 },
+        { fecha: '31/5/2023', genero: 'MASCULINO', tasa: 0.109 },
+        { fecha: '30/6/2023', genero: 'FEMENINO', tasa: 0.051 },
+        { fecha: '30/6/2023', genero: 'MASCULINO', tasa: 0.084 },
+        { fecha: '31/7/2023', genero: 'FEMENINO', tasa: 0.052 },
+        { fecha: '31/7/2023', genero: 'MASCULINO', tasa: 0.066 },
+        { fecha: '31/8/2023', genero: 'FEMENINO', tasa: 0.042 },
+        { fecha: '31/8/2023', genero: 'MASCULINO', tasa: 0.079 },
+        { fecha: '30/9/2023', genero: 'FEMENINO', tasa: 0.039 },
+        { fecha: '30/9/2023', genero: 'MASCULINO', tasa: 0.052 },
+        { fecha: '31/10/2023', genero: 'FEMENINO', tasa: 0.036 },
+        { fecha: '31/10/2023', genero: 'MASCULINO', tasa: 0.051 },
+        { fecha: '30/11/2023', genero: 'FEMENINO', tasa: 0.023 },
+        { fecha: '30/11/2023', genero: 'MASCULINO', tasa: 0.045 },
+        { fecha: '31/12/2023', genero: 'FEMENINO', tasa: 0.031 },
+        { fecha: '31/12/2023', genero: 'MASCULINO', tasa: 0.043 },
+        { fecha: '31/1/2024', genero: 'FEMENINO', tasa: 0.028 },
+        { fecha: '31/1/2024', genero: 'MASCULINO', tasa: 0.030 },
+        { fecha: '29/2/2024', genero: 'FEMENINO', tasa: 0.035 },
+        { fecha: '29/2/2024', genero: 'MASCULINO', tasa: 0.049 },
+        { fecha: '31/3/2024', genero: 'FEMENINO', tasa: 0.030 },
+        { fecha: '31/3/2024', genero: 'MASCULINO', tasa: 0.025 },
+        { fecha: '30/4/2024', genero: 'FEMENINO', tasa: 0.021 },
+        { fecha: '30/4/2024', genero: 'MASCULINO', tasa: 0.018 },
+        { fecha: '31/5/2024', genero: 'FEMENINO', tasa: 0.021 },
+        { fecha: '31/5/2024', genero: 'MASCULINO', tasa: 0.017 },
+        { fecha: '30/6/2024', genero: 'FEMENINO', tasa: 0.022 },
+        { fecha: '30/6/2024', genero: 'MASCULINO', tasa: 0.028 },
+        { fecha: '31/7/2024', genero: 'FEMENINO', tasa: 0.031 },
+        { fecha: '31/7/2024', genero: 'MASCULINO', tasa: 0.031 },
+        { fecha: '31/8/2024', genero: 'FEMENINO', tasa: 0.020 },
+        { fecha: '31/8/2024', genero: 'MASCULINO', tasa: 0.011 },
+        { fecha: '30/9/2024', genero: 'FEMENINO', tasa: 0.018 },
+        { fecha: '30/9/2024', genero: 'MASCULINO', tasa: 0.036 },
+        { fecha: '31/10/2024', genero: 'FEMENINO', tasa: 0.022 },
+        { fecha: '31/10/2024', genero: 'MASCULINO', tasa: 0.020 },
+        { fecha: '30/11/2024', genero: 'FEMENINO', tasa: 0.017 },
+        { fecha: '30/11/2024', genero: 'MASCULINO', tasa: 0.015 },
+        { fecha: '31/12/2024', genero: 'FEMENINO', tasa: 0.026 },
+        { fecha: '31/12/2024', genero: 'MASCULINO', tasa: 0.015 },
+        { fecha: '31/1/2025', genero: 'FEMENINO', tasa: 0.013 },
+        { fecha: '31/1/2025', genero: 'MASCULINO', tasa: 0.019 },
+        { fecha: '28/2/2025', genero: 'FEMENINO', tasa: 0.006 },
+        { fecha: '28/2/2025', genero: 'MASCULINO', tasa: 0.009 },
+        { fecha: '31/3/2025', genero: 'FEMENINO', tasa: 0.012 },
+        { fecha: '31/3/2025', genero: 'MASCULINO', tasa: 0.013 },
+        { fecha: '30/4/2025', genero: 'FEMENINO', tasa: 0.003 },
+        { fecha: '30/4/2025', genero: 'MASCULINO', tasa: 0.010 },
+        { fecha: '31/7/2025', genero: 'FEMENINO', tasa: 0.001 },
+        { fecha: '31/7/2025', genero: 'MASCULINO', tasa: 0.003 }
+    ];
+
+    const formatCurrency = d3.format("$,.0f");
+    const formatPercent = d3.format(".1%");
+    const formatDate = d3.timeFormat("%b %Y");
+
+    // Reusable function to create line charts
+    function createLineChart(containerId, data, keys, title, yAxisLabel, yFormat) {
+        const container = d3.select(`#${containerId}`);
+        container.html(''); // Clear previous chart
+        const margin = { top: 20, right: 100, bottom: 50, left: 80 },
+              width = container.node().getBoundingClientRect().width - margin.left - margin.right,
+              height = container.node().getBoundingClientRect().height - margin.top - margin.bottom;
+
+        const svg = container.append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scalePoint()
+            .domain(data.map(d => d.mes))
+            .range([0, width])
+            .padding(0.5);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(data, d => Math.max(...keys.map(key => d[key] || 0))) * 1.1])
+            .nice()
+            .range([height, 0]);
+
+        const colorScale = d3.scaleOrdinal()
+            .domain(keys)
+            .range(['#2e7d32', '#66bb6a']); // Dark green, light green
+
+        svg.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x));
+
+        svg.append("g")
+            .call(d3.axisLeft(y).tickFormat(yFormat));
+
+        // Add Y axis label
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .style("font-size", "14px")
+            .text(yAxisLabel);
+
+        const line = d3.line()
+            .x(d => x(d.mes))
+            .y(d => y(d.value))
+            .defined(d => d.value !== null);
+
+        keys.forEach(key => {
+            const pathData = data.map(d => ({ mes: d.mes, value: d[key] }));
+            svg.append("path")
+                .datum(pathData)
+                .attr("fill", "none")
+                .attr("stroke", colorScale(key))
+                .attr("stroke-width", 2)
+                .attr("d", line);
+            
+            svg.selectAll(`.dot-${key}`)
+                .data(pathData.filter(d => d.value !== null))
+                .enter().append("circle")
+                .attr("class", `dot-${key}`)
+                .attr("cx", d => x(d.mes))
+                .attr("cy", d => y(d.value))
+                .attr("r", 5)
+                .attr("fill", colorScale(key))
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("r", 8);
+                    tooltip.style("opacity", 1)
+                           .html(`<strong>${title}</strong><br/>${d.mes}: ${yFormat(d.value)}`)
+                           .style("left", (event.pageX + 10) + "px")
+                           .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function() {
+                    d3.select(this).attr("r", 5);
+                    tooltip.style("opacity", 0);
+                });
+        });
+
+        // Add chart title
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", 0 - (margin.top / 2) + 5)
+            .attr("text-anchor", "middle")
+            .style("font-size", "18px")
+            .style("font-weight", "bold")
+            .text(title);
+
+        // Add legend
+        const legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", `translate(${width + 20}, 20)`);
+        
+        keys.forEach((key, i) => {
+            const legendItem = legend.append("g")
+                .attr("transform", `translate(0, ${i * 25})`);
+            
+            legendItem.append("rect")
+                .attr("width", 18)
+                .attr("height", 18)
+                .attr("fill", colorScale(key))
+                .attr("rx", 4)
+                .attr("ry", 4);
+                
+            legendItem.append("text")
+                .attr("x", 24)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .text(key)
+                .style("font-size", "14px");
+        });
+    }
+    
+    function createBarChart(containerId, data, key, title, yAxisLabel, yFormat) {
+        const container = d3.select(`#${containerId}`);
+        container.html('');
+        const margin = { top: 20, right: 100, bottom: 50, left: 80 },
+              width = container.node().getBoundingClientRect().width - margin.left - margin.right,
+              height = container.node().getBoundingClientRect().height - margin.top - margin.bottom;
+
+        const svg = container.append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scaleBand()
+            .domain(data.map(d => d.genero))
+            .range([0, width])
+            .padding(0.4);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d[key]) * 1.1])
+            .nice()
+            .range([height, 0]);
+
+        const colorScale = d3.scaleOrdinal()
+            .domain(data.map(d => d.genero))
+            .range(['#2e7d32', '#66bb6a']); // Dark green, light green
+
+        svg.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x));
+
+        svg.append("g")
+            .call(d3.axisLeft(y).tickFormat(yFormat));
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .style("font-size", "14px")
+            .text(yAxisLabel);
+
+        const bars = svg.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", d => x(d.genero))
+            .attr("y", d => y(d[key]))
+            .attr("width", x.bandwidth())
+            .attr("height", d => height - y(d[key]))
+            .attr("fill", d => colorScale(d.genero))
+            .on("mouseover", function(event, d) {
+                d3.select(this).attr("fill", d3.rgb(colorScale(d.genero)).darker(0.5));
+                tooltip.style("opacity", 1)
+                       .html(`<strong>${d.genero}</strong><br/>${title}: ${yFormat(d[key])}`)
+                       .style("left", (event.pageX + 10) + "px")
+                       .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this).attr("fill", colorScale(d.genero));
+                tooltip.style("opacity", 0);
+            });
+            
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", 0 - (margin.top / 2) + 5)
+            .attr("text-anchor", "middle")
+            .style("font-size", "18px")
+            .style("font-weight", "bold")
+            .text(title);
+    }
+
+    function createMultiLineChart(containerId, data, keys, title, yAxisLabel, yFormat) {
+        const container = d3.select(`#${containerId}`);
+        container.html(''); // Clear previous chart
+        const margin = { top: 20, right: 100, bottom: 50, left: 80 },
+              width = container.node().getBoundingClientRect().width - margin.left - margin.right,
+              height = container.node().getBoundingClientRect().height - margin.top - margin.bottom;
+
+        const svg = container.append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+        
+        const parseDate = d3.timeParse("%d/%m/%Y");
+        const allDates = [...new Set(data.map(d => d.fecha))].sort((a, b) => parseDate(a) - parseDate(b));
+        const dateValues = allDates.map(d => parseDate(d));
+
+        const x = d3.scaleTime()
+            .domain(d3.extent(dateValues))
+            .range([0, width]);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.tasa) * 1.1])
+            .nice()
+            .range([height, 0]);
+
+        const colorScale = d3.scaleOrdinal()
+            .domain(keys)
+            .range(['#2e7d32', '#66bb6a']); // Dark green, light green
+
+        svg.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b %Y")));
+
+        svg.append("g")
+            .call(d3.axisLeft(y).tickFormat(d3.format(".1%")));
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .style("font-size", "14px")
+            .text(yAxisLabel);
+
+        const series = d3.group(data, d => d.genero);
+
+        const line = d3.line()
+            .x(d => x(parseDate(d.fecha)))
+            .y(d => y(d.tasa));
+
+        svg.selectAll(".line-path")
+            .data(series)
+            .enter()
+            .append("path")
+            .attr("class", "line-path")
+            .attr("d", d => line(d[1]))
+            .attr("fill", "none")
+            .attr("stroke", d => colorScale(d[0]))
+            .attr("stroke-width", 2);
+        
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        svg.selectAll(".dot")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("class", "dot")
+            .attr("cx", d => x(parseDate(d.fecha)))
+            .attr("cy", d => y(d.tasa))
+            .attr("r", 4)
+            .attr("fill", d => colorScale(d.genero))
+            .on("mouseover", function(event, d) {
+                d3.select(this).attr("r", 6);
+                tooltip.style("opacity", 1)
+                       .html(`<strong>${d.genero}</strong><br/>${d.fecha}: ${d3.format(".1%")(d.tasa)}`)
+                       .style("left", (event.pageX + 10) + "px")
+                       .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function() {
+                d3.select(this).attr("r", 4);
+                tooltip.style("opacity", 0);
+            });
+        
+        // Add legend
+        const legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", `translate(${width + 20}, 20)`);
+        
+        keys.forEach((key, i) => {
+            const legendItem = legend.append("g")
+                .attr("transform", `translate(0, ${i * 25})`);
+            
+            legendItem.append("rect")
+                .attr("width", 18)
+                .attr("height", 18)
+                .attr("fill", colorScale(key))
+                .attr("rx", 4)
+                .attr("ry", 4);
+                
+            legendItem.append("text")
+                .attr("x", 24)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .text(key)
+                .style("font-size", "14px");
+        });
+            
+        // Add chart title
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", 0 - (margin.top / 2) + 5)
+            .attr("text-anchor", "middle")
+            .style("font-size", "18px")
+            .style("font-weight", "bold")
+            .text(title);
+    }
+    
+    // Initial chart drawing on page load
+    window.onload = function() {
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        const saldoKeys = ['2024', '2025'];
+        createLineChart('saldo-chart', saldoData, saldoKeys, 'Saldo de Clientas Femeninas (2024 vs 2025)', 'Saldo', d => formatCurrency(d));
+
+        const medianaDataFiltered = medianaData.map(d => ({...d, 'femenino': d.femenino, 'masculino': d.masculino}));
+        const medianaKeys = ['femenino', 'masculino'];
+        createLineChart('mediana-saldo-chart', medianaDataFiltered, medianaKeys, 'Mediana de Saldo Según Género', 'Mediana de Saldo ($)', d => d3.format("$,.2f")(d));
+        
+        const clientesKeys = ['2025', 'masculino'];
+        createLineChart('clientes-chart', clientesData, clientesKeys, 'Cantidad de Clientes según Género (2025)', 'Cantidad de Clientes', d3.format(",.0f"));
+
+        const historicoKeys = ['2024', '2025'];
+        createLineChart('crecimiento-historico-chart', clientesHistoricoData, historicoKeys, 'Crecimiento Histórico de Clientas Femeninas', 'Cantidad de Clientes', d3.format(",.0f"));
+
+        const morosidadKeys = ['FEMENINO', 'MASCULINO'];
+        createMultiLineChart('morosidad-chart', morosidadData, morosidadKeys, 'Tasa de Morosidad por Género', 'Tasa de Morosidad (%)');
+    };
+
+</script>
+
+</body>
+</html>
