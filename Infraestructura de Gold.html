@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infraestructura de Datos – Zona Gold</title>
+  <style>
+    :root{
+      /* Promerica-ish greens (aprox) */
+      --g900:#063b22;
+      --g800:#07512e;
+      --g700:#0a6a3d;
+      --g600:#0a8f43;
+      --g500:#16a34a;
+      --g200:#d1fae5;
+      --g100:#ecfdf5;
+
+      --ink:#0f172a;
+      --muted:#475569;
+      --line:#e2e8f0;
+      --bg:#f8fafc;
+      --card:#ffffff;
+      --shadow:0 10px 30px rgba(2, 6, 23, .08);
+
+      --info:#1d4ed8;
+      --infoBg:#eff6ff;
+
+      --radius:16px;
+      --radiusSm:12px;
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{margin:0;font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;color:var(--ink);background:linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);}
+
+    /* Topbar */
+    .topbar{
+      position:sticky;top:0;z-index:50;
+      background:rgba(255,255,255,.85);
+      backdrop-filter:saturate(160%) blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{max-width:1200px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.2px;}
+    .logo{
+      width:34px;height:34px;border-radius:10px;
+      background:radial-gradient(circle at 30% 30%, #34d399 0%, var(--g600) 45%, var(--g800) 100%);
+      box-shadow:0 10px 20px rgba(10,143,67,.25);
+    }
+    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .nav a{
+      text-decoration:none;color:var(--muted);
+      padding:8px 10px;border-radius:10px;
+      border:1px solid transparent;
+      font-weight:700;font-size:13px;
+    }
+    .nav a:hover{color:var(--ink);border-color:var(--line);background:#fff;}
+
+    /* Layout */
+    .wrap{max-width:1200px;margin:0 auto;padding:24px 16px 60px;}
+
+    /* Hero */
+    .hero{
+      background:
+        radial-gradient(800px 260px at 20% 15%, rgba(16,185,129,.18), transparent 60%),
+        radial-gradient(900px 300px at 80% 5%, rgba(10,143,67,.14), transparent 60%),
+        linear-gradient(135deg, rgba(10,143,67,.10) 0%, rgba(255,255,255,1) 45%, rgba(16,185,129,.08) 100%);
+      border:1px solid rgba(148,163,184,.35);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:26px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:18px;
+      overflow:hidden;
+    }
+    @media (max-width: 720px){
+      .hero{grid-template-columns:1fr;}
+    }
+    .hero h1{margin:0 0 8px;font-size:30px;letter-spacing:-.5px;}
+    .hero p{margin:0;color:var(--muted);line-height:1.45;}
+
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:12px;font-weight:800;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(148,163,184,.35);
+      background:#fff;
+      color:var(--ink);
+    }
+    .b-dim{background:var(--infoBg);border-color:rgba(29,78,216,.18);color:var(--info);}
+    .b-hecho{background:#f3f0ff;border-color:rgba(124,58,237,.25);color:#5b21b6;} 
+    .b-pk{background:#ecfdf5;border-color:rgba(5,150,105,.25);color:#065f46;} 
+    .b-fk{background:#ecfeff;border-color:rgba(8,145,178,.25);color:#155e75;}     
+    .b-ok{background:#fffbeb;border-color:rgba(217,119,6,.25);color:#92400e;}
+
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+    .btn{
+      border:1px solid rgba(148,163,184,.35);
+      background:#fff;
+      color:var(--ink);
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:900;
+      font-size:13px;
+      text-decoration:none;
+      display:inline-flex;align-items:center;gap:8px;
+      cursor:pointer;
+    }
+    .btn.primary{background:linear-gradient(180deg, var(--g600), var(--g700));border-color:rgba(10,143,67,.35);color:white;box-shadow:0 12px 22px rgba(10,143,67,.20);}    
+    .btn:hover{filter:brightness(.98);} 
+
+    /* Sections */
+    .section{margin-top:22px;}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 0 10px;}
+    .section-head h2{margin:0;font-size:18px;letter-spacing:-.2px;}
+    .section-head .sub{margin:0;color:var(--muted);font-size:13px;}
+
+    /* Cards grid */
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;}
+    .card{
+      grid-column:span 12;
+      background:var(--card);
+      border:1px solid rgba(148,163,184,.35);
+      border-radius:var(--radiusSm);
+      box-shadow:0 12px 28px rgba(2,6,23,.06);
+      padding:16px;
+    }
+    @media (min-width: 900px){
+      .span-6{grid-column:span 6;}
+      .span-4{grid-column:span 4;}
+      .span-8{grid-column:span 8;}
+      .span-12{grid-column:span 12;}
+    }
+
+    .callout{
+      border-left:4px solid var(--g600);
+      background:linear-gradient(180deg, rgba(16,185,129,.08), rgba(255,255,255,1));
+      padding:12px 14px;border-radius:14px;
+    }
+    .callout p{margin:0;color:var(--muted);line-height:1.5;}
+
+    /* Accordion */
+    details{border:1px solid rgba(148,163,184,.35);border-radius:14px;background:#fff;overflow:hidden;}
+    details + details{margin-top:10px;}
+    summary{list-style:none;cursor:pointer;padding:12px 14px;font-weight:900;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    summary::-webkit-details-marker{display:none;}
+    .chev{transition:transform .18s ease;}
+    details[open] .chev{transform:rotate(180deg);} 
+    .acc-body{padding:0 14px 12px;color:var(--muted);line-height:1.5;}
+
+    /* Star diagrams */
+    .diagram{
+      width:100%;
+      border:1px solid rgba(148,163,184,.35);
+      border-radius:16px;
+      background:linear-gradient(180deg, rgba(10,143,67,.05), rgba(255,255,255,1));
+      padding:12px;
+      overflow:hidden; /* sin scroll */
+    }
+    .diagram svg{width:100%;height:auto;display:block;}
+    .node{filter: drop-shadow(0 10px 18px rgba(2,6,23,.08));}
+
+    /* Code blocks */
+    .codebox{border:1px solid rgba(148,163,184,.35);border-radius:16px;background:#0b1220;color:#e5e7eb;overflow:hidden;}
+    .codebar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:rgba(255,255,255,.06);border-bottom:1px solid rgba(148,163,184,.25);} 
+    .codebar .title{font-weight:900;font-size:12px;letter-spacing:.4px;}
+    pre{margin:0;padding:14px;overflow:auto;font-family:var(--mono);font-size:12px;line-height:1.45;}
+    .copy{background:linear-gradient(180deg, var(--g600), var(--g700));border:1px solid rgba(10,143,67,.35);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900;cursor:pointer;font-size:12px;}
+
+    /* Toast */
+    .toast{
+      position:fixed;right:16px;bottom:16px;z-index:60;
+      background:#fff;
+      border:1px solid rgba(148,163,184,.45);
+      box-shadow:var(--shadow);
+      border-radius:14px;
+      padding:10px 12px;
+      display:flex;align-items:center;gap:10px;
+      transform:translateY(20px);
+      opacity:0;
+      pointer-events:none;
+      transition:all .18s ease;
+      max-width:340px;
+    }
+    .toast.show{transform:translateY(0);opacity:1;}
+    .toast .ok{width:10px;height:10px;border-radius:999px;background:var(--g600);} 
+    .toast .txt{font-size:13px;color:var(--muted);font-weight:800;}
+
+    /* Footer */
+    footer{margin-top:22px;color:var(--muted);font-size:12px;text-align:center;padding:18px;border-top:1px solid var(--line);} 
+
+    /* Helpers */
+    .muted{color:var(--muted);} 
+    .tight{margin:0;} 
+    .mt12{margin-top:12px;} 
+    .mt16{margin-top:16px;} 
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;} 
+    .row .btn{flex:1;justify-content:center;}
+  </style>
+</head>
+<body id="inicio">
+  <!-- Topbar / Navigation -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#inicio" aria-label="Ir al inicio" style="text-decoration:none;color:inherit;"><span class="logo" aria-hidden="true"></span><span>Zona Gold</span></a>
+      <nav class="nav" aria-label="Navegación">
+        <a href="#que-es">Qué es Gold</a>
+        <a href="#como-usar">Cómo usar Gold</a>
+        <a href="#modelo">Modelos Estrella</a>
+        <a href="#tablas">Tablas de Gold</a>
+        <a href="#diccionario">Diccionarios Disponibles</a>
+        <a href="#queries">Queries Frecuentes</a>
+      </nav>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <!-- HERO -->
+    <section class="hero" aria-label="Portada">
+      <div>
+        <div class="row" style="margin-bottom:10px;">
+          <span class="badge b-fk">Guía de consulta · Uso interno</span>
+        </div>
+        <h1>Infraestructura de Datos – Zona Gold</h1>
+        <p>
+          Material de capacitación para entender <strong>qué hay en Gold</strong>, <strong>cómo se conecta</strong> y <strong>cómo consultarlo correctamente</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Qué es Gold -->
+    <section id="que-es" class="section" aria-label="Qué es Gold">
+      <div class="section-head">
+        <div>
+          <h2>Qué es Gold</h2>
+          <p class="sub">La capa analítica del Lakehouse.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card span-12">
+          <div class="callout">
+            <p><strong>Gold</strong> es la zona donde se consolida, estandariza y modela la información para que podamos responder preguntas de negocio <strong>sin empezar desde cero</strong>.</p>
+          </div>
+          <p class="muted mt12">En la práctica, Gold evita que cada área tenga que ir a buscar tablas crudas o semiprocesadas, interpretar campos, reconciliar definiciones y reconstruir joins. En su lugar, ofrece <strong>tablas con significado</strong> que ya reúnen datos de varias fuentes, con llaves y reglas consistentes.</p>
+          <div class="row mt12">
+            <span class="badge b-dim">Dimensiones = contexto</span>
+            <span class="badge b-hecho">Hechos = métricas</span>
+            <span class="badge b-ok">Masters = vistas analíticas</span>
+            <span class="badge b-fk">Modelos de Datos = enfoque</span>
+          </div>
+        </div>
+
+        <div class="card span-6">
+          <h3 class="tight">Para qué sirve</h3>
+          <ul class="muted" style="margin:10px 0 0;line-height:1.7;">
+            <li><strong>Acelerar análisis</strong>: conexión a tablas listas para consumo.</li>
+            <li><strong>Consistencia</strong>: mismas definiciones, mismas llaves, mismos filtros.</li>
+            <li><strong>Reutilización</strong>: joins y catálogos centralizados (moneda, canal, comercio, etc.).</li>
+            <li><strong>Gobierno</strong>: trazabilidad y estructura para reporting y analítica.</li>
+          </ul>
+        </div>
+
+        <div class="card span-6">
+          <h3 class="tight">Qué NO es</h3>
+          <ul class="muted" style="margin:10px 0 0;line-height:1.7;">
+            <li>No es una copia cruda del origen (eso vive en Bronze).</li>
+            <li>No es un espacio para “inventar joins”: se respeta el <strong>nivel de detalle</strong> de cada tabla.</li>
+            <li>No es una tabla única: es un ecosistema con reglas de uso.</li>
+            <li>No es el lugar para limpiar datos desde cero: aquí se consume lo ya estandarizado.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cómo usar Gold -->
+    <section id="como-usar" class="section" aria-label="Cómo usar Gold">
+      <div class="section-head">
+        <div>
+          <h2>Cómo usar Gold</h2>
+          <p class="sub">Reglas prácticas para consultar correctamente (evitando duplicados, inflados y joins incorrectos).</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card span-12">
+          <ul class="muted" style="margin:0;line-height:1.75;">
+            <li><strong>Definir el nivel de detalle</strong> antes de consultar: FctProductos (información a nivel de producto) vs FctInteracciones (registros por interacción del cliente con el banco).</li>
+            <li><strong>Filtrar por fecha en la tabla de hechos</strong>: ambas tablas guardan historia, es primordial filtrar o agrupar por fecha. Seguido de filtros por categorías, tipos o demás.</li>
+            <li><strong>Joins recomendados</strong>: usar <span class="mono" style="font-family:var(--mono);">LEFT JOIN</span> desde la tabla de hechos hacia dimensiones por la llave (código) correspondiente.</li>
+            <li><strong>Evitar many-to-many</strong>: si un join aumenta filas, revisar las llaves y nivel de detalle de ambas tablas.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modelos estrella -->
+    <section id="modelo" class="section" aria-label="Modelos estrella">
+      <div class="section-head">
+        <div>
+          <h2>Modelos estrella</h2>
+          <p class="sub">Dos modelos: <strong>Interacciones</strong> (interacciones del cliente con el banco) y <strong>Productos</strong> (información a nivel de producto).</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- STAR: Interacciones (primero) -->
+        <div class="card span-12">
+          <div class="row" style="justify-content:space-between;">
+            <h3 class="tight">Modelo estrella · Interacciones</h3>
+            <span class="badge b-hecho">FctInteracciones</span>
+          </div>
+          <p class="muted">Nivel de detalle esperado: <strong>1 registro por interacción</strong> del cliente con el banco.</p>
+          <div class="diagram" role="img" aria-label="Diagrama estrella de FctInteracciones">
+            <svg viewBox="0 0 980 520" aria-hidden="false">
+              <!-- Links -->
+              <g stroke="#0a8f43" stroke-opacity=".55" stroke-width="3">
+                <line x1="490" y1="260" x2="170" y2="90" />
+                <line x1="490" y1="260" x2="170" y2="210" />
+                <line x1="490" y1="260" x2="170" y2="330" />
+                <line x1="490" y1="260" x2="170" y2="450" />
+
+                <line x1="490" y1="260" x2="820" y2="90" />
+                <line x1="490" y1="260" x2="820" y2="210" />
+                <line x1="490" y1="260" x2="820" y2="330" />
+                <line x1="490" y1="260" x2="820" y2="450" />
+              </g>
+
+              <!-- Fact -->
+              <g class="node">
+                <rect x="360" y="215" width="260" height="90" rx="16" fill="#f1f5f9" stroke="#94a3b8" stroke-opacity=".55" />
+                <text x="490" y="255" text-anchor="middle" font-weight="900" fill="#0f172a">FctInteracciones</text>
+                <text x="490" y="278" text-anchor="middle" font-size="12" fill="#334155">Campo Único: COD_INTERACCION</text>
+              </g>
+
+              <!-- Left dims -->
+              <g class="node">
+                <rect x="70" y="55" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="170" y="92" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimTipoInteraccion</text>
+                <text x="170" y="112" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_TIPO_INTERACCION</text>
+              </g>
+              <g class="node">
+                <rect x="70" y="175" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="170" y="212" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimCanal</text>
+                <text x="170" y="232" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_CANAL</text>
+              </g>
+              <g class="node">
+                <rect x="70" y="295" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="170" y="332" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimPais</text>
+                <text x="170" y="352" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_PAIS</text>
+              </g>
+              <g class="node">
+                <rect x="70" y="415" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="170" y="452" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimProducto</text>
+                <text x="170" y="472" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_PRODUCTO</text>
+              </g>
+
+              <!-- Right dims (mismo color) -->
+              <g class="node">
+                <rect x="720" y="55" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="820" y="92" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimComercio</text>
+                <text x="820" y="112" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_COMERCIO</text>
+              </g>
+              <g class="node">
+                <rect x="720" y="175" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="820" y="212" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimMoneda</text>
+                <text x="820" y="232" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_MONEDA</text>
+              </g>
+              <g class="node">
+                <rect x="720" y="295" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="820" y="332" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimEstado</text>
+                <text x="820" y="352" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_ESTADO</text>
+              </g>
+              <g class="node">
+                <rect x="720" y="415" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="820" y="452" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimCalendario</text>
+                <text x="820" y="472" text-anchor="middle" font-size="12" fill="#1d4ed8">FEC_CORTE</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- STAR: Productos -->
+        <div class="card span-12">
+          <div class="row" style="justify-content:space-between;">
+            <h3 class="tight">Modelo estrella · Productos</h3>
+            <span class="badge b-hecho">FctProductos</span>
+          </div>
+          <p class="muted">Nivel de detalle esperado: <strong>información a nivel de COD_PRODUCTO</strong> según la fecha de corte.</p>
+          <div class="diagram" role="img" aria-label="Diagrama estrella de FctProductos">
+            <svg viewBox="0 0 980 420" aria-hidden="false">
+              <!-- Links -->
+              <g stroke="#0a8f43" stroke-opacity=".55" stroke-width="3">
+                <line x1="490" y1="210" x2="170" y2="90" />
+                <line x1="490" y1="210" x2="170" y2="210" />
+                <line x1="490" y1="210" x2="170" y2="330" />
+
+                <line x1="490" y1="210" x2="820" y2="90" />
+                <line x1="490" y1="210" x2="820" y2="210" />
+                <line x1="490" y1="210" x2="820" y2="330" />
+              </g>
+
+              <!-- Fact -->
+              <g class="node">
+                <rect x="360" y="165" width="260" height="90" rx="16" fill="#f1f5f9" stroke="#94a3b8" stroke-opacity=".55" />
+                <text x="490" y="205" text-anchor="middle" font-weight="900" fill="#0f172a">FctProductos</text>
+                <text x="490" y="228" text-anchor="middle" font-size="12" fill="#334155">Producto (COD_PRODUCTO)</text>
+              </g>
+
+              <!-- Left dims -->
+              <g class="node">
+                <rect x="70" y="55" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="170" y="92" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimProducto</text>
+                <text x="170" y="112" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_PRODUCTO</text>
+              </g>
+              <g class="node">
+                <rect x="70" y="175" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="170" y="212" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimTipoProducto</text>
+                <text x="170" y="232" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_TIPO_PRODUCTO</text>
+              </g>
+              <g class="node">
+                <rect x="70" y="295" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="170" y="332" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimMoneda</text>
+                <text x="170" y="352" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_MONEDA</text>
+              </g>
+
+              <!-- Right dims -->
+              <g class="node">
+                <rect x="720" y="55" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="820" y="92" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimEstado</text>
+                <text x="820" y="112" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_ESTADO</text>
+              </g>
+              <g class="node">
+                <rect x="720" y="175" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="820" y="212" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimPromotor</text>
+                <text x="820" y="232" text-anchor="middle" font-size="12" fill="#1d4ed8">COD_PROMOTOR</text>
+              </g>
+              <g class="node">
+                <rect x="720" y="295" width="200" height="70" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-opacity=".25" />
+                <text x="820" y="332" text-anchor="middle" font-weight="900" fill="#1d4ed8">DimCalendario</text>
+                <text x="820" y="352" text-anchor="middle" font-size="12" fill="#1d4ed8">FEC_CORTE</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tablas principales -->
+    <section id="tablas" class="section" aria-label="Tablas de Gold">
+      <div class="section-head">
+        <div>
+          <h2>Tablas de Gold</h2>
+          <p class="sub">Resumen de los productos de datos disponibles en Gold (dimensiones, hechos, masters y modelos).</p>
+        </div>
+      </div>
+
+      <div class="grid">
+ <!-- Dimensiones (catálogos/contexto) -->
+<div class="card span-12">
+  <div class="row" style="justify-content:space-between;">
+    <strong>Dimensiones</strong>
+    <span class="badge b-dim">Catálogos / Contexto</span>
+  </div>
+
+  <p class="muted" style="margin:10px 0 0;">
+    Se usan para enriquecer los hechos con descripciones, jerarquías y clasificaciones. Se enlazan mediante su <strong>llave primaria</strong> (PK) desde la tabla de hecho.
+  </p>
+
+  <div class="grid mt16">
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+      <strong>DimProducto</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Atributos de los productos del banco.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: COD_PRODUCTO</span></div>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+      <strong>DimTipoProducto</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Clasificaciones del producto según su tipo.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: COD_TIPO_PRODUCTO</span></div>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+      <strong>DimTipoInteraccion</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Clasificaciones de la interacción según su tipo.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: COD_TIPO_INTERACCION</span></div>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+      <strong>DimPromotor</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Catálogo de ejecutivos/promotores asignados.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: COD_PROMOTOR</span></div>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+      <strong>DimMoneda</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Catálogo de monedas y sus descripciones.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: COD_MONEDA</span></div>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+      <strong>DimEstado</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Catálogo de estados del producto o interacción.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: COD_ESTADO</span></div>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+      <strong>DimComercio</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Catálogo de comercios y clasificaciones asociadas.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: COD_COMERCIO</span></div>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+      <strong>DimCanal</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Catálogo de canales por los que se efectúan interacciones.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: COD_CANAL</span></div>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+      <strong>DimPais</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Catálogo de países donde se efectúan interacciones.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: COD_PAIS</span></div>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+      <strong>DimCliente</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Atributos sociodemográficos del cliente para segmentación y análisis.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: COD_CLIENTE</span></div>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+      <strong>DimGeografico</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Información geográfica de los clientes.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: COD_CLIENTE</span></div>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+        <strong>DimCalendario</strong>
+        <span class="badge b-dim">Dimensión</span>
+      </div>
+      <p class="muted">Calendario analítico para navegación temporal y filtros de fechas.</p>
+      <div class="row mt12"><span class="badge b-pk">PK: FEC_CORTE</span></div>
+    </div>
+
+
+  </div> <!-- cierre grid interno -->
+</div> <!-- cierre card Dimensiones -->
+
+
+
+<!-- Hechos (métricas) -->
+<div class="card span-12">
+  <div class="row" style="justify-content:space-between;">
+    <strong>Hechos</strong>
+    <span class="badge b-hecho">Métricas / Medición</span>
+  </div>
+  <p class="muted" style="margin:10px 0 0;">
+    Tablas base para análisis cuantitativo. Primero se filtra y agrupa aquí; luego se enriquece con dimensiones.
+  </p>
+  <div class="grid mt16">
+    <div class="card span-6">
+      <div class="row" style="justify-content:space-between;">
+        <strong>FctInteracciones</strong>
+        <span class="badge b-hecho">Hecho</span>
+      </div>
+      <p class="muted">
+        Registro de las interacciones transaccionales y no transaccionales del cliente con el banco.
+      </p>
+      <div class="row mt12" style="gap:6px;">
+        <span class="badge b-pk">Identificador: COD_INTERACCION</span>
+      </div>
+    </div>
+    <div class="card span-6">
+      <div class="row" style="justify-content:space-between;">
+        <strong>FctProductos</strong>
+        <span class="badge b-hecho">Hecho</span>
+      </div>
+      <p class="muted">
+        Métricas y atributos a nivel de producto según la fecha de corte.
+      </p>
+      <div class="row mt12" style="gap:6px;">
+        <span class="badge b-pk">Identificador: COD_PRODUCTO</span>
+      </div>
+    </div>
+  </div> <!-- cierre grid interno -->
+</div> <!-- cierre card Hechos -->
+
+
+<!-- Masters -->
+<div class="card span-12">
+  <div class="row" style="justify-content:space-between;">
+    <strong>Masters</strong>
+    <span class="badge b-ok">Vistas analíticas</span>
+  </div>
+
+  <p class="muted" style="margin:10px 0 0;">
+    Datos listos para analítica que combinan múltiples dominios/fuentes con reglas estandarizadas.
+  </p>
+
+  <div class="grid mt16">
+    <div class="card span-6">
+      <div class="row" style="justify-content:space-between;">
+        <strong>MasterAnalytics</strong>
+        <span class="badge b-ok">Master</span>
+      </div>
+      <p class="muted">
+        Master consolidado para analítica que permite entender todas las aristas del cliente, y de los prospectos con información disponible.
+      </p>
+    </div>
+
+    <div class="card span-6">
+      <div class="row" style="justify-content:space-between;">
+        <strong>MasterAtomos</strong>
+        <span class="badge b-ok">Master</span>
+      </div>
+      <p class="muted">
+        Master de átomos relacionales del cliente, consolida vínculos y relaciones familiares para análisis de redes, hogares y dependencia entre clientes.
+      </p>
+    </div>
+  </div> <!-- cierre grid interno -->
+</div> <!-- cierre card Masters -->
+
+
+<!-- Modelos de datos -->
+<div class="card span-12">
+  <div class="row" style="justify-content:space-between;">
+    <strong>Modelos de Datos</strong>
+    <span class="badge b-fk">Enfoque</span>
+  </div>
+
+  <p class="muted" style="margin:10px 0 0;">
+    Modelos analíticos construidos en Gold para casos de uso específicos.
+  </p>
+
+  <div class="grid mt16">
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+        <strong>MdtDeteccionCuentasEfectivoABC</strong>
+        <span class="badge b-fk">Modelo</span>
+      </div>
+      <p class="muted">
+        Modelo enfocado en detección / clasificación asociada a cuentas en efectivo para análisis y monitoreo.
+      </p>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+        <strong>MdtTrackingEnroll</strong>
+        <span class="badge b-fk">Modelo</span>
+      </div>
+      <p class="muted">
+        Modelo enfocado en el seguimiento de clientes enrolados y acceso a bancas.
+      </p>
+    </div>
+
+    <div class="card span-4">
+      <div class="row" style="justify-content:space-between;">
+        <strong>MdtAbonosCredito</strong>
+        <span class="badge b-fk">Modelo</span>
+      </div>
+      <p class="muted">
+        Modelo enfocado en el seguimiento de los abonos de créditos.
+      </p>
+    </div>
+  </div> <!-- cierre grid interno -->
+</div> <!-- cierre card Modelos -->
+</section>
+
+    <!-- Diccionarios -->
+    <section id="diccionario" class="section" aria-label="Diccionarios Disponibles">
+      <div class="section-head">
+        <div>
+          <h2>Diccionarios Disponibles</h2>
+        <p class="sub">Accesos directos a documentación interna.</p> 
+       </div>
+      </div>
+
+      <div class="grid">
+        <div class="card span-12">
+        <div class="row mt12">
+          <a class="btn" href="https://bancopromericacr.sharepoint.com/:x:/r/sites/CientficosdeDatos/Shared%20Documents/Diccionario%20de%20Datos/Diccionario%20de%20Dimensiones%20y%20Hechos.xlsx?d=wed1b46b668e54cf28cdc85f80727e5c9&csf=1&web=1&e=LknKgP" target="_blank" rel="noopener">Diccionario Dimensiones y Hechos</a>
+          <a class="btn" href="https://bancopromericacr.sharepoint.com/:x:/r/sites/CientficosdeDatos/Shared%20Documents/Diccionario%20de%20Datos/Diccionario%20de%20Variables%20Master%20Analytics.xlsx?d=w85b8370142e74032b95b6acddbacc32f&csf=1&web=1&e=zKK4Cc" target="_blank" rel="noopener">Diccionario de Masters</a>
+          <a class="btn" href="#" title="Link por definir">Diccionario de Modelos de Datos</a>
+        </div>
+      </div>
+    </section>    </section>
+
+
+
+
+    <!-- Queries comunes -->
+    <section id="queries" class="section" aria-label="Queries comunes">
+      <div class="section-head">
+        <div>
+          <h2>Queries comunes</h2>
+          <p class="sub">Listos para usar en código M. Cada query se puede desplegar/replegar y copiar con el botón.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Query 1 -->
+        <div class="card span-12">
+          <details open>
+            <summary>
+              <span>Facturación de Tarjeta de Crédito</span>
+              <span class="chev">▾</span>
+            </summary>
+            <div class="acc-body">
+              <div class="codebox">
+                <div class="codebar">
+                  <div class="title">Power Query (M) · SQL Database (Gold)</div>
+                  <button class="copy" type="button" onclick="copyText('q_fact_tc')">Copiar query</button>
+                </div>
+                <pre id="q_fact_tc">let
+   Source = Sql.Database("synw-modeling-prod-westus2-001-ondemand.sql.azuresynapse.net", "gold", [Query="SELECT 
+      F.FEC_CORTE
+    , F.COD_INTERACCION
+    , F.COD_TIPO_INTERACCION
+    , F.COD_CLIENTE
+    , F.COD_PRODUCTO
+    , F.COD_MONEDA
+    , F.COD_ESTADO
+    , F.COD_INFO_INTERACCION
+    , F.MONTO_INTERACCION
+
+    -- Tipo Interacción
+    , T.TIPO_INTERACCION
+    , T.SUBTIPO_INTERACCION
+    , T.CATEGORIA_INTERACCION
+    , T.SUBCATEGORIA_INTERACCION
+
+    -- Moneda
+    , M.DESCRIPCION_MONEDA
+
+FROM FctInteracciones F
+
+LEFT JOIN DimTipoInteraccion T
+    ON F.COD_TIPO_INTERACCION = T.COD_TIPO_INTERACCION
+  
+LEFT JOIN DimMoneda M
+    ON F.COD_MONEDA = M.COD_MONEDA
+
+WHERE T.SUBCATEGORIA_INTERACCION = 'TC_COMPRAS_COMERCIO'
+  AND F.FEC_CORTE BETWEEN DATEADD(DAY, 1, EOMONTH(GETDATE(), -2))
+    AND EOMONTH(GETDATE(), -1)"])
+in
+    Source</pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Placeholders (estructura lista) -->
+        <div class="card span-12">
+          <details>
+            <summary>
+              <span>Receta (por completar) · Query 2</span>
+              <span class="chev">▾</span>
+            </summary>
+            <div class="acc-body">
+              <div class="codebox">
+                <div class="codebar">
+                  <div class="title">Plantilla</div>
+                  <button class="copy" type="button" onclick="copyText('q_tpl_2')">Copiar query</button>
+                </div>
+                <pre id="q_tpl_2">-- Objetivo:
+-- Tabla(s) base:
+-- Joins:
+-- Filtros:
+-- Campos de salida:
+-- Notas:
+
+SELECT
+    -- ...
+FROM
+    -- ...</pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="card span-12">
+          <details>
+            <summary>
+              <span>Receta (por completar) · Query 3</span>
+              <span class="chev">▾</span>
+            </summary>
+            <div class="acc-body">
+              <div class="codebox">
+                <div class="codebar">
+                  <div class="title">Plantilla</div>
+                  <button class="copy" type="button" onclick="copyText('q_tpl_3')">Copiar query</button>
+                </div>
+                <pre id="q_tpl_3">-- Objetivo:
+-- Tabla(s) base:
+-- Joins:
+-- Filtros:
+-- Campos de salida:
+-- Notas:</n
+SELECT
+    -- ...
+FROM
+    -- ...</pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="card span-12">
+          <details>
+            <summary>
+              <span>Receta (por completar) · Query 4</span>
+              <span class="chev">▾</span>
+            </summary>
+            <div class="acc-body">
+              <div class="codebox">
+                <div class="codebar">
+                  <div class="title">Plantilla</div>
+                  <button class="copy" type="button" onclick="copyText('q_tpl_4')">Copiar query</button>
+                </div>
+                <pre id="q_tpl_4">-- Objetivo:
+-- Tabla(s) base:
+-- Joins:
+-- Filtros:
+-- Campos de salida:
+-- Notas:</n
+SELECT
+    -- ...
+FROM
+    -- ...</pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <footer>
+        <p class="muted" style="margin:0;">Uso interno · Zona Gold · Infraestructura analítica</p>
+      </footer>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="ok" aria-hidden="true"></span>
+    <span class="txt" id="toastTxt">Copiado.</span>
+  </div>
+
+  <script>
+    // Copy (copia todo el contenido del bloque)
+    function copyText(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      const text = el.innerText;
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(()=>toast('Copiado al portapapeles'));
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        toast('Copiado al portapapeles');
+      }
+    }
+
+    // Toast
+    const toastEl = document.getElementById('toast');
+    const toastTxt = document.getElementById('toastTxt');
+    let toastTimer = null;
+    function toast(msg){
+      toastTxt.textContent = msg;
+      toastEl.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=>toastEl.classList.remove('show'), 1600);
+    }
+
+    window.copyText = copyText;
+  </script>
+</body>
+</html>
